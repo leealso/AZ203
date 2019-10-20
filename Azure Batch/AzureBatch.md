@@ -25,6 +25,9 @@ There is no additional charge for using Batch. You only pay for the underlying r
 * [az batch job create](https://docs.microsoft.com/en-us/cli/azure/batch/job?view=azure-cli-latest#az-batch-job-create)
 * [az batch task create](https://docs.microsoft.com/en-us/cli/azure/batch/task?view=azure-cli-latest#az-batch-task-create)
 
+### CLI Commands examples
+[AzureBatch.ps1](AzureBatch.ps1)
+
 ## References
 * [Batch: Cloud-scale job scheduling and compute management](https://azure.microsoft.com/en-us/services/batch/)
 * [Azure Batch documentation](https://docs.microsoft.com/en-us/azure/batch/)
