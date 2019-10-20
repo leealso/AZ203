@@ -1,18 +1,20 @@
 # Implement Batch Jobs by Using Azure Batch Services
-
-
+&nbsp;&nbsp;
 ## Objectives
 * Create an azure batch account and run a batch job/task using the Azure CLI.
 * Know the sequence of CLI commands to createa and tun a batch job/task.
 
 ## What is Azure Batch?
 Azure Batch is an IaaS offering that provides a service for submtting large quantities of similar tasks into Azure to be deployed to virtual machines for execution.
+
 Batch works well with intrinsically parallel (also known as "embarrassingly parallel") workloads. Intrinsically parallel workloads are those where the applications can run independently, and each instance completes part of the work.
+
 There is no additional charge for using Batch. You only pay for the underlying resources consumed, such as the virtual machines, storage, and networking.
+
 ![Azure Batch workflow](https://docs.microsoft.com/en-us/azure/batch/media/batch-technical-overview/tech_overview_03.png)
 
 ## Components of an Azure Batch solution
-* **Azure Batch Account:** top level construct, responsible for authenticating request, scheduling task to Virtual Machines, and moving data in and out of the batch processing from the storage account that’s associated with the batch account.
+* **Azure Batch Account:** top level construct, responsible for authenticating request, scheduling task to virtual machines, and moving data in and out of the batch processing from the storage account that’s associated with the batch account.
   * **Job:** container for one or more tasks that are similar in processing and should be scheduled onto virtual machines. The job configures those virtual machines, moves data in and out of them as well as your executable code.
     * **Task:** describes which code to execute along with where to get the input and where to put the output data (defaults to files in the storage account).
   * **Pool:** similarly configured virtual machines that will be used to support execution of one or more jobs.
