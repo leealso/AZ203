@@ -1,5 +1,6 @@
 # Implement Batch Jobs by Using Azure Batch Services
 
+
 ## Objectives
 * Create an azure batch account and run a batch job/task using the Azure CLI.
 * Know the sequence of CLI commands to createa and tun a batch job/task.
