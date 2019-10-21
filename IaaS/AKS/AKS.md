@@ -10,7 +10,7 @@ Containers are means of packaging, deploying, and operating software. Containers
 Azure provides several facilities to utilize container, including Service Fabric, Azure Kubernetes Services (AKS), and Container Instances.
 
 ## Create and Dockerize a .NET Core App
-1. Create a .NET Core App.
+1. Create and run a .NET Core App.
 ```sh
 # Create directory
 mkdir webapp
@@ -27,7 +27,7 @@ dotnet build
 # Run web app
 dotnet run
 ```
-2. Create a Dockerfile for the .NET Core App.
+2. Create a Dockerfile for a .NET Core App.
 ```dockerfile
 # Use dotnet SDK as base image
 FROM microsoft/dotnet:sdk AS build-env
@@ -47,19 +47,44 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "webapp.dll"]
 ```
-3. Build container and run.
+3. Build and run container.
 ```sh
+# Build image from Dockerfile
 docker build -t webapp .
-docker run -d -p 8081:80 --name myapp webapp
+
+# Run container using the built image
+docker run -d -p 8081:80 --name mywebapp webapp
 ```
 
-## Azure Batch associated CLI commands
-* [az batch pool create](https://docs.microsoft.com/en-us/cli/azure/batch/pool?view=azure-cli-latest#az-batch-pool-create)
-* [az batch job create](https://docs.microsoft.com/en-us/cli/azure/batch/job?view=azure-cli-latest#az-batch-job-create)
-* [az batch task create](https://docs.microsoft.com/en-us/cli/azure/batch/task?view=azure-cli-latest#az-batch-task-create)
+## What is AKS?
+Azure Kubernetes Services (AKS) is a fully managed Kubernetes container orchestrator. It takes care of much of the overhead of managing your own Kubernetes infrastructure.
 
-### CLI commands examples
-[AzureBatch.ps1](AzureBatch.ps1)
+## Create an AKS Cluster with CLI
+The following commands can be used to create a AKS cluster based on the [azure-vote.yaml](azure-vote.yaml) file.
+```powershell
+$resourceGroupName = "aks-example"
+$clusterName = "aks-cluster"
+
+az group create -n $resourceGroupName `
+ -l westus
+
+az aks create -g $resourceGroupName `
+ -n $clusterName `
+ --node-count 1 `
+ --generate-ssh-keys `
+ --enable-addons monitoring
+
+az aks get-credentials `
+ -g $resourceGroupName `
+ -n $clusterName
+
+kubectl get nodes
+
+kubectl apply -f azure-vote.yaml
+
+kubectl get service azure-vote-front `
+ --watch
+```
 
 ## References
 * [Batch: Cloud-scale job scheduling and compute management](https://azure.microsoft.com/en-us/services/batch/)
