@@ -1,16 +1,16 @@
 # Create Containerized Solutions
 &nbsp;&nbsp;
 ## Objectives
-* How to create a docker file to package a .Net Core application.
+* How to create a docker file to package a .NET Core application.
 * How to launch an AKS cluster to run a container stored in a repository such as Docker Hub.
 
-## What is a Container?
+## What are Containers?
 Containers are means of packaging, deploying, and operating software. Containers make IaaS much more agile than with virtual machines, as well as significantly more effective.
 
 Azure provides several facilities to utilize container, including Service Fabric, Azure Kubernetes Services (AKS), and Container Instances.
 
-## Create and Dockerize a .NET Core App
-1. Create and run a .NET Core App.
+## Create and Dockerize a .NET Core application
+1. Create and run a .NET Core application.
 ```sh
 # Create directory
 mkdir webapp
@@ -27,7 +27,7 @@ dotnet build
 # Run web app
 dotnet run
 ```
-2. Create a Dockerfile for a .NET Core App.
+2. Create a Dockerfile for a .NET Core application.
 ```dockerfile
 # Use dotnet SDK as base image
 FROM microsoft/dotnet:sdk AS build-env
@@ -47,7 +47,7 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "webapp.dll"]
 ```
-3. Build and run container.
+3. Build and run the Docker image.
 ```sh
 # Build image from Dockerfile
 docker build -t webapp .
@@ -60,24 +60,30 @@ docker run -d -p 8081:80 --name mywebapp webapp
 Azure Kubernetes Services (AKS) is a fully managed Kubernetes container orchestrator. It takes care of much of the overhead of managing your own Kubernetes infrastructure.
 
 ## Create an AKS Cluster with CLI
-The following commands can be used to create a AKS cluster based on the [azure-vote.yaml](azure-vote.yaml) file.
+The following commands can be used to create a AKS cluster using the [azure-vote.yaml](azure-vote.yaml) file.
+A Kubernetes manifest file defines a desired state for the cluster, such as what container images to run. The manifest used in this example is [azure-vote.yaml](azure-vote.yaml).
 ```powershell
 # Set variables
 $resourceGroupName = "aks-example"
 $clusterName = "aks-cluster"
 
-# Create resource group
-az group create -n $resourceGroupName `
+# Create a resource group
+az group create `
+ -n $resourceGroupName `
  -l westus
 
 # Create AKS cluster
-az aks create -g $resourceGroupName `
+az aks create `
+ -g $resourceGroupName `
  -n $clusterName `
  --node-count 1 `
  --generate-ssh-keys `
- --enable-addons monitoring
+ --enable-addons monitoring # Enables Azure Monitor
+ 
+ # Install Kubernetes command-line client (kubectl)
+az aks install-cli
 
-# Create AKS credentials
+# Downloads credentials and configures the Kubernetes CLI to use them
 az aks get-credentials `
  -g $resourceGroupName `
  -n $clusterName
@@ -85,12 +91,19 @@ az aks get-credentials `
 # Get AKS cluster nodes
 kubectl get nodes
 
-# Deploy container to AKS cluster
-kubectl apply -f azure-vote.yaml
+# Deploy application to AKS cluster
+kubectl apply `
+ -f azure-vote.yaml
 
-# Wait for deployment
+# Monitor deployment progress
 kubectl get service azure-vote-front `
  --watch
+ 
+# Delete AKS cluster
+az group delete `
+ --name resourceGroupName `
+ --yes `
+ --no-wait
 ```
 
 ## References
