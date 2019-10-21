@@ -107,5 +107,5 @@ az group delete `
 ```
 
 ## References
-* [Dockerize an ASP.NET Core application](https://docs.docker.com/engine/examples/dotnetcore/)
-* [Quickstart: Deploy an Azure Kubernetes Service cluster using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough)
+* [Dockerize an ASP.NET Core application](https://docs.docker.com/engine/examples/dotnetcore/).
+* [Quickstart: Deploy an Azure Kubernetes Service cluster using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough).
