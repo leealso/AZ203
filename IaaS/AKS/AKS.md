@@ -11,7 +11,7 @@ Azure provides several facilities to utilize container, including Service Fabric
 
 ## Create and Dockerize a .NET Core App
 1. Create a .NET Core App.
-```bash
+```sh
 # Create directory
 mkdir webapp
 
@@ -29,6 +29,7 @@ dotnet run
 ```
 2. Create a Dockerfile for the .NET Core App.
 ```dockerfile
+# Use dotnet SDK as base image
 FROM microsoft/dotnet:sdk AS build-env
 WORKDIR /app
 
@@ -47,7 +48,7 @@ COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "webapp.dll"]
 ```
 3. Build container and run.
-```dockerfile
+```sh
 docker build -t webapp .
 docker run -d -p 8081:80 --name myapp webapp
 ```
