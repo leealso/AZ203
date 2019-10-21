@@ -71,9 +71,6 @@ az group create -n $resourceGroupName `
  -l westus
 
 # Create AKS cluster
-# --node-count:
-# --generate-ssh-keys:
-# --enable-addons monitoring:
 az aks create -g $resourceGroupName `
  -n $clusterName `
  --node-count 1 `
@@ -88,7 +85,7 @@ az aks get-credentials `
 # Get AKS cluster nodes
 kubectl get nodes
 
-# Apply application
+# Deploy container to AKS cluster
 kubectl apply -f azure-vote.yaml
 
 # Wait for deployment
@@ -97,8 +94,5 @@ kubectl get service azure-vote-front `
 ```
 
 ## References
-* [Batch: Cloud-scale job scheduling and compute management](https://azure.microsoft.com/en-us/services/batch/)
-* [Azure Batch documentation](https://docs.microsoft.com/en-us/azure/batch/)
-* [Developer features](https://docs.microsoft.com/en-us/azure/batch/batch-api-basics)
-* [Manage Batch resources with Azure CLI](https://docs.microsoft.com/en-us/azure/batch/batch-cli-get-started)
-* [Azure CLI examples for Azure Batch](https://docs.microsoft.com/en-us/azure/batch/cli-samples)
+* [Dockerize an ASP.NET Core application](https://docs.docker.com/engine/examples/dotnetcore/)
+* [Quickstart: Deploy an Azure Kubernetes Service cluster using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough)
