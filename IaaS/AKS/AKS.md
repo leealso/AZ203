@@ -62,26 +62,36 @@ Azure Kubernetes Services (AKS) is a fully managed Kubernetes container orchestr
 ## Create an AKS Cluster with CLI
 The following commands can be used to create a AKS cluster based on the [azure-vote.yaml](azure-vote.yaml) file.
 ```powershell
+# Set variables
 $resourceGroupName = "aks-example"
 $clusterName = "aks-cluster"
 
+# Create resource group
 az group create -n $resourceGroupName `
  -l westus
 
+# Create AKS cluster
+# --node-count:
+# --generate-ssh-keys:
+# --enable-addons monitoring:
 az aks create -g $resourceGroupName `
  -n $clusterName `
  --node-count 1 `
  --generate-ssh-keys `
  --enable-addons monitoring
 
+# Create AKS credentials
 az aks get-credentials `
  -g $resourceGroupName `
  -n $clusterName
 
+# Get AKS cluster nodes
 kubectl get nodes
 
+# Apply application
 kubectl apply -f azure-vote.yaml
 
+# Wait for deployment
 kubectl get service azure-vote-front `
  --watch
 ```
