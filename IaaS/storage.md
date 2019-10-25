@@ -73,7 +73,7 @@ namespace az203.storage.tables
     }
 }
 ```
-3. Query the table storage from C#.
+3. Query the table storage.
 ```csharp
 using System;
 using System.IO;
@@ -124,7 +124,6 @@ namespace az203.storage.tables
         public static async Task AddAsync<T>(
         CloudTable table, T entity) where T : TableEntity
         {
-            // Returns a TableOperation instance to insert the specified entity into Microsoft Azure storage
             var insertOperation = TableOperation.Insert(entity);
             await table.ExecuteAsync(insertOperation);
         }
@@ -179,7 +178,5 @@ namespace az203.storage.tables
 }
 ```
 
-
 ## References
-* [Dockerize an ASP.NET Core application](https://docs.docker.com/engine/examples/dotnetcore/).
-* [Quickstart: Deploy an Azure Kubernetes Service cluster using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough).
+* [Get started with Azure Cosmos DB Table API and Azure Table storage using the .NET SDK](https://docs.microsoft.com/en-us/azure/cosmos-db/tutorial-develop-table-dotnet).
