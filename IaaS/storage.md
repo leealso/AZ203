@@ -73,13 +73,110 @@ namespace az203.storage.tables
     }
 }
 ```
-3. Build and run the Docker image.
-```sh
-# Build image from Dockerfile
-docker build -t webapp .
+3. Query the table storage from C#.
+```csharp
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
-# Run container using the built image
-docker run -d -p 8081:80 --name mywebapp webapp
+namespace az203.storage.tables
+{
+    public class UserRepository
+    {
+        private static string _connectionString = "";
+
+        public static async Task Example()
+        {
+            // Parses a connection string and returns a cloud storage account created from the connection string
+            var storageAccount = CloudStorageAccount
+            .Parse(_connectionString);
+            // Creates a new Table service client
+            var tableClient = storageAccount.CreateCloudTableClient();
+            
+            // Get table reference
+            var usersTable = tableClient.GetTableReference("Users");
+            // Gets a CloudTable object with the specified name
+            await usersTable.CreateIfNotExistsAsync();
+
+            await DeleteAllUsersAsync(usersTable);
+            
+            var user1 = new User("john@example.com", "Canada", "John");
+            await AddAsync(usersTable, user1);
+            
+            var users = new List<User> {
+                new User("allan@example.com", "US", "Allan", "Smith"),
+                new User("ken@example.com", "Spain", "Kenneth", "Jhones")
+            };
+            await AddBatchAsync(usersTable, users);
+
+            var user2 = await GetAsync<User>(
+            usersTable, "Canada", "john@example.com");
+            System.Console.WriteLine(user2);
+
+            users = await FindUsersByNameAsync(usersTable, "Allan");
+            users.ForEach(Console.WriteLine);
+        }
+
+        public static async Task AddAsync<T>(
+        CloudTable table, T entity) where T : TableEntity
+        {
+            // Returns a TableOperation instance to insert the specified entity into Microsoft Azure storage
+            var insertOperation = TableOperation.Insert(entity);
+            await table.ExecuteAsync(insertOperation);
+        }
+
+        public static async Task AddBatchAsync<T>(
+        CloudTable table, IEnumerable<T> entities) where T : TableEntity
+        {
+            var batchOperation = new TableBatchOperation();
+            foreach (var entity in entities)
+                batchOperation.Insert(entity);
+            await table.ExecuteBatchAsync(batchOperation);
+        }
+
+        public static async Task<T> GetAsync<T>(
+        CloudTable table, string pk, string rk) where T : TableEntity
+        {
+            var retrieve = TableOperation.Retrieve<User>(pk, rk);
+            var result = await table.ExecuteAsync(retrieve);
+            return (T)result.Result;
+        }
+
+        public static async Task DeleteAsync<T>(
+        CloudTable table, T entity) where T : TableEntity
+        {
+            var retrieve = TableOperation.Delete(entity);
+            await table.ExecuteAsync(retrieve);
+        }
+
+        public static async Task<List<User>> FindUsersByNameAsync(
+        CloudTable table, string name)
+        {
+            var filterCondition = TableQuery.GenerateFilterCondition("Name", QueryComparisons.Equal, name);
+            var query = new TableQuery<User>().Where(filterCondition);
+            var results = await table.ExecuteQuerySegmentedAsync(query, null);
+            return results.ToList();
+        }
+
+        public static async Task DeleteAllUsersAsync(CloudTable table)
+        {
+            var users = new [] {
+                await GetAsync<User>(table, "US", "allan@example.com"),
+                await GetAsync<User>(table, "Spain", "ken@example.com"),
+                await GetAsync<User>(table, "Canada", "john@example.com")
+            }.ToList();
+            users.ForEach(async user =>
+            {
+                if (user != null)
+                    await DeleteAsync(table, user);
+            });
+        }
+    }
+}
 ```
 
 
