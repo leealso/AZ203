@@ -10,9 +10,6 @@ Azure Cosmos DB is a globally distributed database engine that's designed to pro
 Azure Cosmos DB is multi-modal and takes advantage of fast, single-digit-milisecond data access using your favorite API among SQL, MongoDB, Cassandra, Tables, or Gremlin (referred to as API surfaces).
 
 ## Create and Populate a Cosmos DB Database with Data from C#
-Packages required:
-* [Microsoft.Azure.DocumentDB.Core](https://www.nuget.org/packages/Microsoft.Azure.DocumentDB.Core)
-
 1. Create a Cosmos DB Database.
 ```powershell
 # Set variables
@@ -219,6 +216,9 @@ namespace az203.storage.cosmosdb
     }
 }
 ```
+
+Packages required:
+* [Microsoft.Azure.DocumentDB.Core](https://www.nuget.org/packages/Microsoft.Azure.DocumentDB.Core)
 
 ## References
 * [Get started with Azure Cosmos DB Table API and Azure Table storage using the .NET SDK](https://docs.microsoft.com/en-us/azure/cosmos-db/tutorial-develop-table-dotnet).

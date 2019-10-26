@@ -1,10 +1,10 @@
 # Create Containerized Solutions
-&nbsp;&nbsp;
+
 ## Objectives
 * How to create a docker file to package a .NET Core application.
 * How to launch an AKS cluster to run a container stored in a repository such as Docker Hub.
 
-## What are Containers?
+## What is a Container?
 Containers are means of packaging, deploying, and operating software. Containers make IaaS much more agile than with virtual machines, as well as significantly more effective.
 
 Azure provides several facilities to utilize container, including Service Fabric, Azure Kubernetes Services (AKS), and Container Instances.
