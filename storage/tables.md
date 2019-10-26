@@ -1,5 +1,5 @@
 # Develop Solutions that use Storage Tables
-&nbsp;&nbsp;
+
 ## Objectives
 * How to perform query functions to Azure Table Storage.
 
@@ -9,7 +9,12 @@ Azure Table Storage is a highly scalable, semi-structured (you do not have to pr
 The data model/access is entity-based with entities keyed by a partition and row key. Entities are automatically partitioned based on the partition key. Entities can also be queried based upon attributes values (as well as key values).
 
 ## Code CRUD and Query Operations with C#
-1. Create a Storage Account
+Packages required:
+* [Microsoft.Azure.CosmosDB.Table](https://www.nuget.org/packages/Microsoft.Azure.CosmosDB.Table/)
+* [Microsoft.Azure.Storage.Common](https://www.nuget.org/packages/Microsoft.Azure.Storage.Common/)
+* [WindowsAzure.Storage](https://www.nuget.org/packages/WindowsAzure.Storage/)
+
+1. Create a Storage Account.
 ```powershell
 # Set variables
 $resourceGroupName = "table-example"
