@@ -60,8 +60,7 @@ docker run -d -p 8081:80 --name mywebapp webapp
 Azure Kubernetes Services (AKS) is a fully managed Kubernetes container orchestrator. It takes care of much of the overhead of managing your own Kubernetes infrastructure.
 
 ## Create an AKS Cluster with CLI
-The following commands can be used to create a AKS cluster using the [azure-vote.yaml](azure-vote.yaml) file.
-A Kubernetes manifest file defines a desired state for the cluster, such as what container images to run. The manifest used in this example is [azure-vote.yaml](azure-vote.yaml).
+1. Create an AKS cluster using the [azure-vote.yaml](azure-vote.yaml) manifest file.
 ```powershell
 # Set variables
 $resourceGroupName = "aks-example"
