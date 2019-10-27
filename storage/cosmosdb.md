@@ -236,7 +236,5 @@ You can only have two of Consitency, Availability and Partition Tolerance.
     <img src="https://miro.medium.com/max/946/1*rxTP-_STj-QRDt1X9fdVlA.png">
 </p>
 
-![CAP Theorem](https://miro.medium.com/max/946/1*rxTP-_STj-QRDt1X9fdVlA.png)
-
 ## References
 * [Get started with Azure Cosmos DB Table API and Azure Table storage using the .NET SDK](https://docs.microsoft.com/en-us/azure/cosmos-db/tutorial-develop-table-dotnet).
