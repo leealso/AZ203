@@ -23,12 +23,12 @@ az group create `
  -n $resourceGroupName `
  -l $location
 
-# Create a SQL API Cosmos DB account with session consistency and multi-master enabled
+# Create CosmosDB Account
 az cosmosdb create `
  -g $resourceGroupName `
  --name $accountName `
- --kind GlobalDocumentDB `
- --locations "West US=0" "North Central US=1" `
+ --kind GlobalDocumentDB ` # SQL surface API to store JSON documents and be able to query using SQL
+ --locations "West US=0" "North Central US=1" ` # Primary / secondary region
  --default-consistency-level Strong `
  --enable-multiple-write-locations true `
  --enable-automatic-failover true
@@ -54,12 +54,12 @@ az cosmosdb show `
  -g $resourceGroupName `
  --query "documentEndpoint"
 
-# Clean up
+# Delete resource group
 az group delete
  --name resourceGroupName `
  --yes
 ```
-2. Define table entity.
+2. Define table entity using the SQL API surface.
 ```csharp
 using System;
 using System.IO;
