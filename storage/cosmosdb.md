@@ -157,21 +157,18 @@ namespace az203.storage.cosmosdb
             try
             {
                 await _client.ReadDocumentAsync(
-                                UriFactory.CreateDocumentUri(
-                                  databaseId, collectionId, documentId),
+                    UriFactory.CreateDocumentUri(databaseId, collectionId, documentId),
                     new RequestOptions { 
                         PartitionKey = new PartitionKey(documentId) 
                     });
-                Console.WriteLine(
-                    $"Family {documentId} already exists in the database");
+                Console.WriteLine($"Family {documentId} already exists in the database");
             }
             catch (DocumentClientException de)
             {
                 if (de.StatusCode == HttpStatusCode.NotFound)
                 {
                     await _client.CreateDocumentAsync(
-                        UriFactory.CreateDocumentCollectionUri(
-                            databaseId, collectionId), 
+                        UriFactory.CreateDocumentCollectionUri(databaseId, collectionId),
                         data);
                     Console.WriteLine($"Created Family {documentId}");
                 }
