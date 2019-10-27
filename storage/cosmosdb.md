@@ -232,6 +232,10 @@ You can only have two of Consitency, Availability and Partition Tolerance.
 * **Availability:** every request receives a (non-error) response - whitout the guarantee that it contains the most recent write.
 * **Partition Tolerance:** the system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes.
 
+<p align="center">
+    <img src="https://miro.medium.com/max/946/1*rxTP-_STj-QRDt1X9fdVlA.png">
+</p>
+
 ![CAP Theorem](https://miro.medium.com/max/946/1*rxTP-_STj-QRDt1X9fdVlA.png)
 
 ## References
