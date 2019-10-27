@@ -107,8 +107,10 @@ namespace az203.storage.cosmosdb
             var family1 = JObject.Parse(File.ReadAllText("andersen.json"));
             var family2 = JObject.Parse(File.ReadAllText("wakefield.json"));
 
-            await CreateDocumentIfNotExistsAsync(_databaseId, _collectionId, family1["id"].ToString(), family1);
-            await CreateDocumentIfNotExistsAsync(_databaseId, _collectionId, family2["id"].ToString(), family2);
+            await CreateDocumentIfNotExistsAsync(
+                _databaseId, _collectionId, family1["id"].ToString(), family1);
+            await CreateDocumentIfNotExistsAsync(
+                _databaseId, _collectionId, family2["id"].ToString(), family2);
 
             await GetDocumentByIdAsync(_databaseId, _collectionId, "AndersenFamily");
             await GetDocumentByIdAsync(_databaseId, _collectionId, "WakefieldFamily");
