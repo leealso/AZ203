@@ -152,10 +152,7 @@ namespace az203.storage.cosmosdb
         }
 
         private static async Task CreateDocumentIfNotExistsAsync(
-            string databaseId, 
-            string collectionId,
-            string documentId,
-            JObject data)
+            string databaseId, string collectionId, string documentId, JObject data)
         {
             try
             {
