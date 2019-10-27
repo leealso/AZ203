@@ -109,7 +109,8 @@ namespace az203.storage.cosmosdb
                     PartitionKey = new PartitionKeyDefinition() { 
                         Paths = new Collection<string>(new [] { "/id" })
                     }
-                });
+                }
+            );
  
             var family1 = JObject.Parse(File.ReadAllText("andersen.json"));
             var family2 = JObject.Parse(File.ReadAllText("wakefield.json"));
@@ -123,32 +124,29 @@ namespace az203.storage.cosmosdb
             await GetDocumentByIdAsync(_databaseId, _collectionId, "WakefieldFamily");
 
             //Select the AndersenFamily document
-            ExecuteSqlQuery(_databaseId, _collectionId, 
-            @"
+            ExecuteSqlQuery(_databaseId, _collectionId, @"
                 SELECT *
                 FROM Families f
-                WHERE f.id = 'AndersenFamily'
-            ");
+                WHERE f.id = 'AndersenFamily'"
+            );
 
             // Project the family name and city where the address city 
             // and state are the same value
-            ExecuteSqlQuery(_databaseId, _collectionId, 
-            @"
+            ExecuteSqlQuery(_databaseId, _collectionId, @"
                 SELECT {""Name"":f.id, ""City"":f.address.city} AS Family
                 FROM Families f
-                WHERE f.address.city = f.address.state
-            ");  
+                WHERE f.address.city = f.address.state"
+            );
 
             // Get all children names whose family id matches WakefieldFamily, 
             // and order by city of residence 
-            ExecuteSqlQuery(_databaseId, _collectionId, 
-            @"
+            ExecuteSqlQuery(_databaseId, _collectionId, @"
                 SELECT c.givenName
                 FROM Families f
                 JOIN c IN f.children
                 WHERE f.id = 'WakefieldFamily'
-                ORDER BY f.address.city ASC
-            ");  
+                ORDER BY f.address.city ASC"
+            );
         }
 
         private static async Task CreateDocumentIfNotExistsAsync(
@@ -160,7 +158,8 @@ namespace az203.storage.cosmosdb
                     UriFactory.CreateDocumentUri(databaseId, collectionId, documentId),
                     new RequestOptions { 
                         PartitionKey = new PartitionKey(documentId) 
-                    });
+                    }
+                );
                 Console.WriteLine($"Family {documentId} already exists in the database");
             }
             catch (DocumentClientException de)
@@ -169,7 +168,9 @@ namespace az203.storage.cosmosdb
                 {
                     await _client.CreateDocumentAsync(
                         UriFactory.CreateDocumentCollectionUri(databaseId, collectionId),
-                        data);
+                        data
+                    );
+                    
                     Console.WriteLine($"Created Family {documentId}");
                 }
                 else
@@ -180,13 +181,10 @@ namespace az203.storage.cosmosdb
         }
 
         private static async Task<string> GetDocumentByIdAsync(
-            string databaseId, 
-            string collectionId,
-            string documentId)
+            string databaseId, string collectionId, string documentId)
         {
             var response = await _client.ReadDocumentAsync(
-                UriFactory.CreateDocumentUri(
-                    databaseId, collectionId, documentId),
+                UriFactory.CreateDocumentUri(databaseId, collectionId, documentId),
                 new RequestOptions { 
                     PartitionKey = new PartitionKey(documentId) 
                 }
@@ -197,20 +195,19 @@ namespace az203.storage.cosmosdb
             return response.Resource.ToString();
         }
 
-        private static void ExecuteSqlQuery(
-            string databaseId, string collectionId, string sql)
+        private static void ExecuteSqlQuery(string databaseId, string collectionId, string sql)
         {
             System.Console.WriteLine("SQL: " + sql);
             // Set some common query options
             var queryOptions = new FeedOptions { 
                 MaxItemCount = -1, 
-                EnableCrossPartitionQuery = true };
-
+                EnableCrossPartitionQuery = true
+            };
 
             var sqlQuery = _client.CreateDocumentQuery<JObject>(
-                    UriFactory.CreateDocumentCollectionUri(
-                        databaseId, collectionId),
-                    sql, queryOptions );
+                UriFactory.CreateDocumentCollectionUri(databaseId, collectionId),
+                sql, queryOptions
+            );
 
             foreach (var result in sqlQuery)
             {
