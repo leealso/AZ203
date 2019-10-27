@@ -11,7 +11,7 @@ Batch works well with intrinsically parallel (also known as "embarrassingly para
 
 There is no additional charge for using Batch. You only pay for the underlying resources consumed, such as the virtual machines, storage, and networking.
 
-![Azure Batch workflow](https://docs.microsoft.com/en-us/azure/batch/media/batch-technical-overview/tech_overview_03.png)
+![Azure Batch Workflow](https://docs.microsoft.com/en-us/azure/batch/media/batch-technical-overview/tech_overview_03.png)
 
 ## Components of an Azure Batch solution
 * **Azure Batch Account:** top level construct, responsible for authenticating request, scheduling task to virtual machines, and moving data in and out of the batch processing from the storage account that’s associated with the batch account.
