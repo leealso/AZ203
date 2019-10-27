@@ -154,7 +154,9 @@ namespace az203.storage.cosmosdb
         {
             try
             {
+                // Reads a Document from the Azure Cosmos DB service
                 await _client.ReadDocumentAsync(
+                    // Given a database, collection and document id, this creates a document link
                     UriFactory.CreateDocumentUri(databaseId, collectionId, documentId),
                     new RequestOptions { 
                         PartitionKey = new PartitionKey(documentId) 
@@ -166,7 +168,9 @@ namespace az203.storage.cosmosdb
             {
                 if (de.StatusCode == HttpStatusCode.NotFound)
                 {
+                    // Creates a Document in the Azure Cosmos DB service
                     await _client.CreateDocumentAsync(
+                        // Given a database and collection id, this creates a collection link
                         UriFactory.CreateDocumentCollectionUri(databaseId, collectionId),
                         data
                     );
@@ -197,13 +201,13 @@ namespace az203.storage.cosmosdb
 
         private static void ExecuteSqlQuery(string databaseId, string collectionId, string sql)
         {
-            System.Console.WriteLine("SQL: " + sql);
-            // Set some common query options
+            // Specifies the options associated with enumeration operations in the Azure Cosmos DB service
             var queryOptions = new FeedOptions { 
                 MaxItemCount = -1, 
                 EnableCrossPartitionQuery = true
             };
-
+            
+            // Extension method to create a query for documents in the Azure Cosmos DB service
             var sqlQuery = _client.CreateDocumentQuery<JObject>(
                 UriFactory.CreateDocumentCollectionUri(databaseId, collectionId),
                 sql, queryOptions
