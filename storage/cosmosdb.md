@@ -225,5 +225,12 @@ namespace az203.storage.cosmosdb
 Packages required:
 * [Microsoft.Azure.DocumentDB.Core](https://www.nuget.org/packages/Microsoft.Azure.DocumentDB.Core)
 
+## Cosmos DB Consistency Levels
+### CAP Theorem
+You can only have two of Consitency, Availability and Partition Tolerance.
+* **Consistency:** every read receives the most recente write or an error.
+* **Availability:** every request receives a (non-error) response - whitout the guarantee that it contains the most recent write.
+* **Partition Tolerance:** the system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes.
+
 ## References
 * [Get started with Azure Cosmos DB Table API and Azure Table storage using the .NET SDK](https://docs.microsoft.com/en-us/azure/cosmos-db/tutorial-develop-table-dotnet).

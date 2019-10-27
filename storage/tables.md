@@ -184,6 +184,5 @@ Packages required:
 * [Microsoft.Azure.Storage.Common](https://www.nuget.org/packages/Microsoft.Azure.Storage.Common/)
 * [WindowsAzure.Storage](https://www.nuget.org/packages/WindowsAzure.Storage/)
 
-
 ## References
 * [Get started with Azure Cosmos DB Table API and Azure Table storage using the .NET SDK](https://docs.microsoft.com/en-us/azure/cosmos-db/tutorial-develop-table-dotnet).
