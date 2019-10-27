@@ -91,12 +91,19 @@ namespace az203.storage.cosmosdb
 
         private static async Task RunAsync()
         {
+            // Provides a client-side logical representation for the Azure Cosmos DB service
+            // This client is used to configure and execute requests against the service
             _client = new DocumentClient(new Uri(_endpoint), _key);
-
+            
+            // Creates or gets a database resource in the Azure Cosmos DB service
             await _client.CreateDatabaseIfNotExistsAsync(new Database { Id = _databaseId });
-
+            
+            // Creates or gets a collection in the Azure Cosmos DB service
             await _client.CreateDocumentCollectionIfNotExistsAsync(
-                UriFactory.CreateDatabaseUri(_databaseId), 
+                // Given a database id, this creates a database link
+                UriFactory.CreateDatabaseUri(_databaseId),
+                // Represents a document collection in the Azure Cosmos DB service
+                // A collection is a named logical container for documents
                 new DocumentCollection { 
                     Id = _collectionId,
                     PartitionKey = new PartitionKeyDefinition() { 

@@ -91,7 +91,8 @@ namespace az203.storage.tables
 
         public static async Task Example()
         {
-            // Parses a connection string and returns a cloud storage account created from the connection string
+            // Parses a connection string and returns a cloud storage account created from
+            // the connection string
             var storageAccount = CloudStorageAccount
             .Parse(_connectionString);
             // Creates a new Table service client
