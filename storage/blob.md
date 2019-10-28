@@ -45,7 +45,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace linuxacademy.az203.storage.blobs
+namespace az203.storage.blobs
 {
     public class Blobs
     {
