@@ -243,7 +243,7 @@ You can only have two of Consitency, Availability and Partition Tolerance.
 
 Level | Overview | CAP | Users
 ------------ | -------------|------------ | -------------|
-Strong Consistency | All writes are read immediately by anyone. Everyone sees the same thing. Similar to existing RDBMS.  | C: Highest &nsbp; A: Lowest \n P: Lowest | Financial, inventory, scheduling |
+Strong Consistency | All writes are read immediately by anyone. Everyone sees the same thing. Similar to existing RDBMS.  | C: Highest <br> A: Lowest <br> P: Lowest | Financial, inventory, scheduling |
 Bounded Stateless | abc | abc | abc |
 Session | abc | abc | abc |
 Consistent Prefix | abc | abc | abc |
