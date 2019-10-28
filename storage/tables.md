@@ -93,8 +93,7 @@ namespace az203.storage.tables
         {
             // Parses a connection string and returns a cloud storage account created from
             // the connection string
-            var storageAccount = CloudStorageAccount
-            .Parse(_connectionString);
+            var storageAccount = CloudStorageAccount.Parse(_connectionString);
             // Creates a new Table service client
             var tableClient = storageAccount.CreateCloudTableClient();
             
@@ -114,8 +113,7 @@ namespace az203.storage.tables
             };
             await AddBatchAsync(usersTable, users);
 
-            var user2 = await GetAsync<User>(
-            usersTable, "Canada", "john@example.com");
+            var user2 = await GetAsync<User>(usersTable, "Canada", "john@example.com");
             System.Console.WriteLine(user2);
 
             users = await FindUsersByNameAsync(usersTable, "Allan");

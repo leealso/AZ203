@@ -8,7 +8,7 @@ Study material for the AZ 203 certification.
 ## Develop for Azure Storage
 1. [Develop Solutions that use Storage Tables](storage/tables.md).
 2. [Develop Solutions that use Cosmos DB Storage](storage/cosmosdb.md).
-3. [Develop Solutions that use Blob Storage]().
+3. [Develop Solutions that use Blob Storage](storage/blob.md).
 
 ## Develop Azure Platform as a service Compute Solutions
 1. [Create Azure App Service Web Apps]().
