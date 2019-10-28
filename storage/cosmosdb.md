@@ -236,5 +236,18 @@ You can only have two of Consitency, Availability and Partition Tolerance.
     <img src="https://miro.medium.com/max/946/1*rxTP-_STj-QRDt1X9fdVlA.png">
 </p>
 
+### Cosmos DB Consistency Levels
+<p align="center">
+    <img src="https://docs.microsoft.com/en-us/azure/cosmos-db/media/consistency-levels/five-consistency-levels.png">
+</p>
+
+Level | Overview | CAP | Users
+------------ | -------------|------------ | -------------|
+Strong Consistency | All writes are read immediately by anyone. Everyone sees the same thing. Similar to existing RDBMS  | C: Highest \n A: Lowest \n P: Lowest | Financial, inventory, scheduling |
+Bounded Stateless | abc | abc | abc |
+Session | abc | abc | abc |
+Consistent Prefix | abc | abc | abc |
+Eventual Consistency | abc | abc | abc |
+
 ## References
 * [Get started with Azure Cosmos DB Table API and Azure Table storage using the .NET SDK](https://docs.microsoft.com/en-us/azure/cosmos-db/tutorial-develop-table-dotnet).
