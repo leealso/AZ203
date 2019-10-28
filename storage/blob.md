@@ -53,24 +53,32 @@ namespace az203.storage.blobs
         
         public static async Task RunAsync()
         {
+            // Parses a connection string and returns a cloud storage account created from
+            // the connection string
             var storageAccount = CloudStorageAccount.Parse(_connectionString);
+            // Creates the Blob service client
             var cloudBlobClient = storageAccount.CreateCloudBlobClient();
 
+            // Returns a reference to a CloudBlobContainer object with the specified name
             var cloudBlobContainer = cloudBlobClient.GetContainerReference("mycontainer");
+            // Creates a container
             await cloudBlobContainer.CreateAsync();
 
+            // Represents the permissions for a container
             var permissions = new BlobContainerPermissions {
                 PublicAccess = BlobContainerPublicAccessType.Blob
             };
+            // Sets permissions for the container
             await cloudBlobContainer.SetPermissionsAsync(permissions);
 
             var localFileName = "Blob.txt";
             File.WriteAllText(localFileName, "Hello, World!");
 
+            // Gets a reference to a block blob in this container.
             var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
+            // Upload a file to a blobs. If the blob already exists, it will be overwritten
             await cloudBlockBlob.UploadFromFileAsync(localFileName);
 
-            // List the blobs in the container.
             Console.WriteLine("Listing blobs in container.");
             BlobContinuationToken blobContinuationToken = null;
             do {
@@ -97,7 +105,8 @@ namespace az203.storage.blobs
             catch (StorageException ex)
             {
                 System.Console.WriteLine(ex.Message);
-                if (ex.InnerException != null) System.Console.WriteLine(ex.InnerException.Message);
+                if (ex.InnerException != null)
+                    System.Console.WriteLine(ex.InnerException.Message);
             }
 
             await Task.Delay(TimeSpan.FromSeconds(5));
