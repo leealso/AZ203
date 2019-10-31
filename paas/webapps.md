@@ -23,7 +23,6 @@ Production | S1 / P1V* | Dedicated infrastructure, deployment slots, custom doma
 Isolated |  | Has network isolation |
 
 ## Create an App Service Web Application using CLI and GitHub
-
 ```powershell
 # Set variables
 $resourceGroupName = "webapps-example"
@@ -80,7 +79,6 @@ az group delete `
 ```
 
 ## Create an App Service Web App using Containers and Docker Hub using CLI and GitHub
-
 ```powershell
 # Set variables
 $resourceGroupName = "webapps-example"
@@ -120,6 +118,6 @@ az group delete `
 ```
 
 ## References
-* [Consistency levels in Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/consistency-levels).
-* [Getting Behind the 9-Ball: Cosmos DB Consistency Levels Explained](https://blog.jeremylikness.com/blog/2018-03-23_getting-behind-the-9ball-cosmosdb-consistency-levels/).
-* [Getting started with SQL queries](https://docs.microsoft.com/en-us/azure/cosmos-db/sql-query-getting-started).
+* [App Service Documentation](https://docs.microsoft.com/en-us/azure/app-service/).
+* [Create an App Service app with deployment from GitHub using Azure CLI](https://docs.microsoft.com/bs-latn-ba/azure/app-service/scripts/cli-deploy-github).
+* [Web App for Containers](https://azure.microsoft.com/en-us/services/app-service/containers/).
