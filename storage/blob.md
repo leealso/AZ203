@@ -74,7 +74,7 @@ namespace az203.storage.blobs
             var localFileName = "Blob.txt";
             File.WriteAllText(localFileName, "Hello, World!");
 
-            // Gets a reference to a block blob in this container.
+            // Gets a reference to a block blob in this container
             var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
             // Upload a file to a blobs. If the blob already exists, it will be overwritten
             await cloudBlockBlob.UploadFromFileAsync(localFileName);
@@ -82,6 +82,7 @@ namespace az203.storage.blobs
             Console.WriteLine("Listing blobs in container.");
             BlobContinuationToken blobContinuationToken = null;
             do {
+                // Returns a result segment containing a collection of blob items in the container
                 var results = await cloudBlobContainer.ListBlobsSegmentedAsync(null, blobContinuationToken);
                 blobContinuationToken = results.ContinuationToken;
                 foreach (var item in results.Results) {
@@ -90,16 +91,20 @@ namespace az203.storage.blobs
             } while (blobContinuationToken != null); 
 
             var destinationFile = localFileName.Replace(".txt", "_DOWNLOADED.txt");
+            // Download the contents of a blob to a file
             await cloudBlockBlob.DownloadToFileAsync(destinationFile, FileMode.Create);
 
             var leaseId = Guid.NewGuid().ToString();
 
             File.WriteAllText(localFileName, "New Content");
-
+            
+            // Acquires a lease on this blob
             cloudBlockBlob.AcquireLease(TimeSpan.FromSeconds(30), leaseId);
 
             try
             {
+                // Upload a file to a blob.
+                // If the blob already exists, it will be overwritten
                 await cloudBlockBlob.UploadFromFileAsync(localFileName);
             }
             catch (StorageException ex)
@@ -113,12 +118,13 @@ namespace az203.storage.blobs
 
             await cloudBlockBlob.UploadFromFileAsync(localFileName);
 
-            // or release it
+            // Release the lease on this blob
             await cloudBlockBlob.ReleaseLeaseAsync(new AccessCondition()
             {
                 LeaseId = leaseId
             });
-
+            
+            // Delete the blob if it already exists
             await cloudBlobContainer.DeleteIfExistsAsync();
         }
     }
