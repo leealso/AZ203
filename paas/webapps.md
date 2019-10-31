@@ -12,6 +12,8 @@ The PaaS capabilities of an App Service also affords the ability for your applic
 Additionally, App Services have DevOps capabilities such as continuous deployment from multiple sources, package management, staging environments, custom domain, and SSL certificates.
 
 ## App Service Plans
+Linux does not have F nor D tiers.
+
 Category | Pricing Tier | Features |
 ------------ | -------------|------------ |
 Dev/Test | F1 | Shared infrastructure, no deployment slots, no custom domains, no scaling, free |
@@ -19,8 +21,6 @@ Dev/Test | D1 | Shared infrastructure, no deployment slots, custom domains, no s
 Dev/Test | B1 | Dedicated infrastructure, no deployment slots, custom domains/SSL, manual scaling |
 Production | S1 / P1V* | Dedicated infrastructure, deployment slots, custom domains/SSL, auto-scale |
 Isolated |  | Has network isolation |
-
-Linux does not have F nor D tiers.
 
 ## Create an App Service Web Application using CLI and GitHub
 1. Create a Cosmos DB Database.
