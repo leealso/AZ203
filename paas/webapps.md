@@ -33,7 +33,7 @@ $repoURL = "https://github.com/Azure-Samples/php-docs-hello-world"
 
 # Create a resource group
 az group create `
- -n $resourceGroupName
+ -n $resourceGroupName `
  -l westus
 
 # Create an app service plan
@@ -61,15 +61,11 @@ az webapp deployment source show `
  -n $appName `
  -g $resourceGroupName
 
-az webapp show `
- -n $appName `
- -g $resourceGroupName
-
 # Get the details of a web app
 az webapp show `
  -n $appName `
  -g $resourceGroupName `
- --query "defaultHostName"
+ --query "defaultHostName" `
  -o tsv
 
 # Synchronize from the repository. Only needed under manual integration mode
@@ -78,7 +74,47 @@ az webapp deployment source sync `
  -g $resourceGroupName
 
 # Delete resource group
-az group delete
+az group delete `
+ -n $resourceGroupName `
+ --yes
+```
+
+## Create an App Service Web App using Containers and Docker Hub using CLI and GitHub
+1. Create a web app and deploy using CLI.
+```powershell
+# Set variables
+$resourceGroupName = "webapps-example"
+$servicePlanName = "service-plan"
+$appName = "app-example"
+$container = "microsoft/dotnet-samples:aspnetapp"
+
+# Create a resource group
+az group create `
+ -n $resourceGroupName `
+ -l westus
+
+# Create an app service plan on
+az appservice plan create `
+ -n $servicePlanName `
+ -g $resourceGroupName `
+ --sku FREE `
+ --is-linux
+
+# Create a web app using a container
+az webapp create `
+ -n $appName `
+ -g $resourceGroupName `
+ --plan $servicePlanName `
+ --deployment-container-image-name $container
+
+# Configure web app settings
+az webapp config appsettings set `
+ -n $appName `
+ -g $resourceGroupName `
+ --settings WEBSITES_PORT=80
+
+# Delete resource group
+az group delete `
  -n $resourceGroupName `
  --yes
 ```
