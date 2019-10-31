@@ -23,7 +23,6 @@ Production | S1 / P1V* | Dedicated infrastructure, deployment slots, custom doma
 Isolated |  | Has network isolation |
 
 ## Create an App Service Web Application using CLI and GitHub
-1. Create a Cosmos DB Database.
 ```powershell
 # Set variables
 $resourceGroupName = "webapps-example"
