@@ -1,8 +1,8 @@
 # Create Azure App Service Web Apps
 
 ## Objectives
-* Create web applications using App App.
-* Create App App using the Azure CLI.
+* Create web applications using App Service.
+* Create App Service using the Azure CLI.
 
 ## What is Azure App Service?
 Azure App Service provides for hosting many Azure PaaS offerings including web applications, REST APIs, and mobile backends, Functions and Logic App. They support development using many platforms and languages.
