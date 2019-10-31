@@ -2,6 +2,7 @@
 
 ## Objectives
 * Create a lease on a blob with C#.
+* Controlling access to blobs in a concurrency pattern.
 
 ## What is Azure Blob Storage?
 Azure Blob Storage is a massively scalable storage sustem for unstructured data/binary large objects.
@@ -37,7 +38,7 @@ az group delete `
  --yes `
  --no-wait
 ```
-2. Populate the database using the SQL API surface and the [andersen.json](andersen.json) and [wakefield.json](wakefield.json) JSON files.
+2. Work wih Blobs using C#.
 ```csharp
 using System;
 using System.IO;
@@ -136,6 +137,5 @@ Packages required:
 * [Microsoft.Azure.Storage.Common](https://www.nuget.org/packages/Microsoft.Azure.Storage.Common/)
 
 ## References
-* [Consistency levels in Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/consistency-levels).
-* [Getting Behind the 9-Ball: Cosmos DB Consistency Levels Explained](https://blog.jeremylikness.com/blog/2018-03-23_getting-behind-the-9ball-cosmosdb-consistency-levels/).
-* [Getting started with SQL queries](https://docs.microsoft.com/en-us/azure/cosmos-db/sql-query-getting-started).
+* [Quickstart: Azure Blob storage client library for .NET](https://docs.microsoft.com/th-th/azure////storage/blobs/storage-quickstart-blobs-dotnet?tabs=linux).
+* [Managing Concurrency in Microsoft Azure Storage](https://azure.microsoft.com/en-us/blog/managing-concurrency-in-microsoft-azure-storage-2/).
