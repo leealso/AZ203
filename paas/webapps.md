@@ -21,55 +21,66 @@ Production | S1 / P1V* | Dedicated infrastructure, deployment slots, custom doma
 Isolated |  | Has network isolation |
 
 Linux does not have F nor D tiers.
+
+## Create an App Service Web Application using CLI and GitHub
 1. Create a Cosmos DB Database.
 ```powershell
 # Set variables
-$resourceGroupName = "cosmosdb-example"
-$accountName= "cosmosdb-account"
-$databaseName = "example-db"
-$location = "westus"
+$resourceGroupName = "webapps-example"
+$servicePlanName = "service-plan"
+$appName = "app-example"
+$repoURL = "https://github.com/Azure-Samples/php-docs-hello-world"
 
 # Create a resource group
 az group create `
- -n $resourceGroupName `
- -l $location
+ -n $resourceGroupName
+ -l westus
 
-# Create Cosmos DB Account
-az cosmosdb create `
+# Create an app service plan
+az appservice plan create `
+ -n $servicePlanName `
  -g $resourceGroupName `
- --name $accountName `
- --kind GlobalDocumentDB ` # SQL surface API to store JSON documents and be able to query using SQL
- --locations "West US=0" "North Central US=1" ` # Primary / secondary region
- --default-consistency-level Strong `
- --enable-multiple-write-locations true `
- --enable-automatic-failover true
+ --sku FREE
 
-# Create a database
-az cosmosdb database create `
+# Create a web app
+az webapp create `
+ -n $appName `
  -g $resourceGroupName `
- --name $accountName `
- --db-name $databaseName
+ --plan $servicePlanName
 
-# List account keys
-az cosmosdb list-keys `
- --name $accountName `
+# Manage deployment from git or Mercurial repositories
+az webapp deployment source config `
+ -n $appName `
+ -g $resourceGroupName `
+ --repo-url $repoURL `
+ --branch master `
+ --manual-integration
+
+# Get the details of a source control deployment configuration
+az webapp deployment source show `
+ -n $appName `
  -g $resourceGroupName
 
-# List account connection strings
-az cosmosdb list-connection-strings `
- --name $accountName `
+az webapp show `
+ -n $appName `
  -g $resourceGroupName
 
-# Get account endpoint
-az cosmosdb show `
- --name $accountName `
+# Get the details of a web app
+az webapp show `
+ -n $appName `
  -g $resourceGroupName `
- --query "documentEndpoint"
+ --query "defaultHostName"
+ -o tsv
+
+# Synchronize from the repository. Only needed under manual integration mode
+az webapp deployment source sync `
+ -n $appName `
+ -g $resourceGroupName
 
 # Delete resource group
 az group delete
- --name resourceGroupName `
- --yes
+-n $resourceGroupName `
+--yes
 ```
 2. Populate the database using the SQL API surface and the [andersen.json](andersen.json) and [wakefield.json](wakefield.json) JSON files.
 ```csharp
