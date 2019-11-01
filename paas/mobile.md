@@ -82,30 +82,30 @@ namespace az203
             catch (Exception ex)
             {
                 Console.Error.WriteLine(@"ERROR - AUTHENTICATION FAILED {0}", ex.Message);
-			}
-        }        
-
-		public List<ToDoItem> Items { get; private set;}
+            }
+        }
+        
+        public List<ToDoItem> Items { get; private set;}
 
         public async Task InitializeStoreAsync()
-		{
+        {
 #if OFFLINE_SYNC_ENABLED
 			try
-			{
-				var store = new MobileServiceSQLiteStore("localstore.db");
-				store.DefineTable<ToDoItem>();
+            {
+                var store = new MobileServiceSQLiteStore("localstore.db");
+                store.DefineTable<ToDoItem>();
 
 				// Uses the default conflict handler, which fails on conflict
 				// To use a different conflict handler, pass a parameter to InitializeAsync.
 				// For more details, see http://go.microsoft.com/fwlink/?LinkId=521416
-				await client.SyncContext.InitializeAsync(store);
-
-				store = null;
+                await client.SyncContext.InitializeAsync(store);
+                
+                store = null;
 			} 
             catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
+            {
+                Console.WriteLine(ex.Message);
+            }
 #endif
         }
 
