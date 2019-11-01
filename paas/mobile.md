@@ -2,7 +2,6 @@
 
 ## Objectives
 * Coding pattern for implementing offline sync in the mobile client.
-* Create App Service using the Azure CLI.
 
 ## What is Azure Mobile Apps?
 Azure Mobile Apps are a specific type of Azure App Service to support mobile applications, and bring along all of the features of App Services.
@@ -72,13 +71,13 @@ namespace az203
                 return instance;
             }
         }
-       
-		public async Task Authenticate(UIViewController view)
+        
+        public async Task Authenticate(UIViewController view)
         {
             try
             {
                 AppDelegate.ResumeWithURL = url => url.Scheme == "az293" && client.ResumeWithURL(url);
-				user = await client.LoginAsync(view, MobileServiceAuthenticationProvider.Google, "az293");
+                user = await client.LoginAsync(view, MobileServiceAuthenticationProvider.Google, "az293");
             }
             catch (Exception ex)
             {
