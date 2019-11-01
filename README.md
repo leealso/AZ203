@@ -12,7 +12,7 @@ Study material for the AZ 203 certification.
 
 ## Develop Azure Platform as a Service Compute Solutions
 1. [Create Azure App Service Web Apps](paas/webapps.md).
-2. [Create Azure App Service Mobile Apps](paas/mobileapps.md).
+2. [Create Azure App Service Mobile Apps](paas/mobile.md).
 3. [Create Azure Functions](paas/functions.md).
 
 ## Connect to and Consume Azure and Third-Party Services
