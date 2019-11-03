@@ -57,11 +57,11 @@ namespace az203
             client = new MobileServiceClient(applicationURL);
 
 #if OFFLINE_SYNC_ENABLED
-			InitializeStoreAsync().ContinueWith(_ =>
-			{
-				// Returns a IMobileServiceSyncTable<T> instance, which provides strongly typed data operations for local table
-				todoTable = client.GetSyncTable<ToDoItem>();
-			});
+            InitializeStoreAsync().ContinueWith(_ =>
+            {
+                // Returns a IMobileServiceSyncTable<T> instance, which provides strongly typed data operations for local table
+                todoTable = client.GetSyncTable<ToDoItem>();
+            });
 #else
             // Returns a IMobileServiceTable<T> instance, which provides strongly typed data operations for that table
             todoTable = client.GetTable<ToDoItem>();
@@ -92,7 +92,7 @@ namespace az203
         public async Task InitializeStoreAsync()
         {
 #if OFFLINE_SYNC_ENABLED
-			try
+            try
             {
                 // A SQLite based implementation of MobileServiceStore
                 var store = new MobileServiceSQLiteStore("localstore.db");
