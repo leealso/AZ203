@@ -34,34 +34,36 @@ namespace az203
         private MobileServiceUser user;
         public MobileServiceUser User { get { return user; } }
 
-        static QSTodoService instance = new QSTodoService ();
+        static QSTodoService instance = new QSTodoService();
 
         const string applicationURL = @"https://az203.azurewebsites.net";
 
+        // Provides basic access to a Microsoft Azure Mobile Service
         private MobileServiceClient client;
 #if OFFLINE_SYNC_ENABLED
         const string localDbPath = "localstore.db";
 
+        // Provides operations on local table
         private IMobileServiceSyncTable<ToDoItem> todoTable;
 #else
+        // Provides operations on a table for a Microsoft Azure Mobile Service
         private IMobileServiceTable<ToDoItem> todoTable;
 #endif
 
-        private QSTodoService ()
+        private QSTodoService()
         {
             CurrentPlatform.Init();
 
             client = new MobileServiceClient(applicationURL);
 
 #if OFFLINE_SYNC_ENABLED
-
-			// Initialize the store
 			InitializeStoreAsync().ContinueWith(_ =>
 			{
-				// Create an MSTable instance to allow us to work with the TodoItem table
+				// Returns a IMobileServiceSyncTable<T> instance, which provides strongly typed data operations for local table
 				todoTable = client.GetSyncTable<ToDoItem>();
 			});
 #else
+            // Returns a IMobileServiceTable<T> instance, which provides strongly typed data operations for that table
             todoTable = client.GetTable<ToDoItem>();
 #endif
         }
@@ -76,10 +78,10 @@ namespace az203
         {
             try
             {
-                AppDelegate.ResumeWithURL = url => url.Scheme == "az293" && client.ResumeWithURL(url);
-                user = await client.LoginAsync(view, MobileServiceAuthenticationProvider.Google, "az293");
+                AppDelegate.ResumeWithURL = url => url.Scheme == "az203" && client.ResumeWithURL(url);
+                user = await client.LoginAsync(view, MobileServiceAuthenticationProvider.Google, "az203");
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Console.Error.WriteLine(@"ERROR - AUTHENTICATION FAILED {0}", ex.Message);
             }
@@ -92,17 +94,20 @@ namespace az203
 #if OFFLINE_SYNC_ENABLED
 			try
             {
+                // A SQLite based implementation of MobileServiceStore
                 var store = new MobileServiceSQLiteStore("localstore.db");
+                // Defines schema of a table in the local store
+                // If a table with the same name already exists, the newly defined columns in the table definition will be added to the table
+                // If no table with the same name exists, a table with the specified schema will be created
                 store.DefineTable<ToDoItem>();
 
-				// Uses the default conflict handler, which fails on conflict
-				// To use a different conflict handler, pass a parameter to InitializeAsync.
-				// For more details, see http://go.microsoft.com/fwlink/?LinkId=521416
+				// Initializes the sync context
+                // Uses the default conflict handler, which fails on conflict
                 await client.SyncContext.InitializeAsync(store);
                 
                 store = null;
 			} 
-            catch (Exception ex)
+            catch Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -114,72 +119,77 @@ namespace az203
 #if OFFLINE_SYNC_ENABLED
             try
             {
+                // Pushes all pending operations up to the remote table
                 await client.SyncContext.PushAsync();
 
-                if (pullData) 
+                if(pullData) 
                 {
-                    await todoTable.PullAsync("allTodoItems", todoTable.CreateQuery()); // query ID is used for incremental sync
+                    
+                    // Creates a query for the current table
+                    var query = todoTable.CreateQuery();
+                    // Pulls all items that match the given query from the associated remote table
+                    // Supports incremental sync
+                    await todoTable.PullAsync("allTodoItems", query);
                 }
             }
-            catch (MobileServiceInvalidOperationException e)
+            catch(MobileServiceInvalidOperationException e)
             {
                 Console.Error.WriteLine(@"Sync Failed: {0}", e.Message);
             }
 #endif
         }
 
-        public async Task<List<ToDoItem>> RefreshDataAsync ()
+        public async Task<List<ToDoItem>> RefreshDataAsync()
         {
             try 
             {
 #if OFFLINE_SYNC_ENABLED
-                // Update the local store
                 await SyncAsync(pullData: true);
 #endif
-
-                // This code refreshes the entries in the list view by querying the local TodoItems table.
-                // The query excludes completed TodoItems
-                Items = await todoTable.Where (todoItem => todoItem.Complete == false).ToListAsync ();
+                // Creates a query by applying the specified filter predicate
+                Items = await todoTable.Where(todoItem => todoItem.Complete == false).ToListAsync();
             } 
-            catch (MobileServiceInvalidOperationException e) 
+            catch(MobileServiceInvalidOperationException e) 
             {
-                Console.Error.WriteLine (@"ERROR {0}", e.Message);
+                Console.Error.WriteLine(@"ERROR {0}", e.Message);
                 return null;
             }
 
             return Items;
         }
 
-        public async Task InsertTodoItemAsync (ToDoItem todoItem)
+        public async Task InsertTodoItemAsync(ToDoItem todoItem)
         {
             try 
             {
-                await todoTable.InsertAsync (todoItem); // Insert a new TodoItem into the local database.
+                // Inserts an instance into the table
+                await todoTable.InsertAsync(todoItem);
 #if OFFLINE_SYNC_ENABLED
-                await SyncAsync(); // Send changes to the mobile app backend.
+                await SyncAsync();
 #endif
-                Items.Add (todoItem);
+                Items.Add(todoItem);
             } 
-            catch (MobileServiceInvalidOperationException e) 
+            catch(MobileServiceInvalidOperationException e) 
             {
-                Console.Error.WriteLine (@"ERROR {0}", e.Message);
+                Console.Error.WriteLine(@"ERROR {0}", e.Message);
             }
         }
 
-        public async Task CompleteItemAsync (ToDoItem item)
+        public async Task CompleteItemAsync(ToDoItem item)
         {
             try 
             {
                 item.Complete = true;
-                await todoTable.UpdateAsync (item); // Update todo item in the local database
+                // Updates an instance in the table
+                await todoTable.UpdateAsync(item);
 #if OFFLINE_SYNC_ENABLED
-                await SyncAsync(); // Send changes to the mobile app backend.
+                await SyncAsync();
 #endif
-                Items.Remove (item);
+                Items.Remove(item);
             } 
-            catch (MobileServiceInvalidOperationException e) 
+            catch(MobileServiceInvalidOperationException e) 
             {
-                Console.Error.WriteLine (@"ERROR {0}", e.Message);
+                Console.Error.WriteLine(@"ERROR {0}", e.Message);
             }
         }
     }
