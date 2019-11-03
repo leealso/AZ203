@@ -23,7 +23,7 @@ az group create `
  -n $resourceGroupName `
  -l $location
 
-# Create Cosmos DB Account
+# Create cosmos DB account
 az cosmosdb create `
  -g $resourceGroupName `
  --name $accountName `

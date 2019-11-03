@@ -16,11 +16,11 @@ Study material for the AZ 203 certification.
 3. [Create Azure Functions](paas/functions.md).
 
 ## Connect to and Consume Azure and Third-Party Services
-1. [Develop an App Service Logic App]().
-2. [Integrate Azure Search within Solutions]().
-3. [Establish API Gateways]().
-4. [Develop Event-Based Solutions]().
-5. [Develop Message Based Solutions]().
+1. [Develop an App Service Logic App](thirdparty/logicapp.md).
+2. [Integrate Azure Search within Solutions](thirdparty/logicapp.md).
+3. [Establish API Gateways](thirdparty/logicapp.md).
+4. [Develop Event-Based Solutions](thirdparty/logicapp.md).
+5. [Develop Message Based Solutions](thirdparty/logicapp.md).
 
 ## Implement Security, Monitor, and Optimization
 1. [Implement Secure Acces to Services, Secrets, and Data]().

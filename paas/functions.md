@@ -21,7 +21,7 @@ az group create `
  -n $resourceGroupName `
  -l $location
 
-# Create Storage Account
+# Create storage account
 az storage account create `
  -g $resourceGroupName `
  -n $storageAccountName `
@@ -43,7 +43,7 @@ az storage queue create `
  --account-name $storageAccountName `
  --account-key $key
 
-# Get Storage Account connection string
+# Get storage account connection string
 az storage account show-connection-string `
  -n $storageAccountName `
  --query "conectionString"
@@ -63,7 +63,6 @@ az group delete `
  --yes `
  --no-wait
 ```
-
 2. Create a function triggered by a Storage Queue message and that outputs to a Storage Table.
 ```csharp
 using System;

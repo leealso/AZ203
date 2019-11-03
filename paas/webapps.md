@@ -67,7 +67,8 @@ az webapp show `
  --query "defaultHostName" `
  -o tsv
 
-# Synchronize from the repository. Only needed under manual integration mode
+# Synchronize from the repository
+# Only needed under manual integration mode
 az webapp deployment source sync `
  -n $appName `
  -g $resourceGroupName
