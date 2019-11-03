@@ -79,11 +79,10 @@ az group delete `
 Logic Apps support robust handling/retries activities on error. These can be confiured in boh the GUI and JSON.
 
 Type | Description |
-Default | This policy sends up to four retries at exponentially increasing intervals, which scale by 7.5 seconds but are capped between 5 and 45 seconds. |
-Exponential Interval |  |
-Fixed Interval |  |
-None |  |
- 
+Default | This policy sends up to four retries at exponentially increasing intervals, which scale by 7.5 seconds but are capped between 5 and 45 seconds |
+Exponential Interval | This policy waits a random interval selected from an exponentially growing range before sending the next request |
+Fixed Interval | This policy waits the specified interval before sending the next request |
+None | Don't resend the request |
 
 ### Concurrency/Scaling
 * The Azure Functions runtime will receive up to 16 messages and run functions for each in parallel.
