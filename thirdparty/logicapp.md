@@ -79,6 +79,7 @@ az group delete `
 Logic Apps support robust handling/retries activities on error. These can be confiured in boh the GUI and JSON.
 
 Type | Description |
+---- | ------------|
 Default | This policy sends up to four retries at exponentially increasing intervals, which scale by 7.5 seconds but are capped between 5 and 45 seconds |
 Exponential Interval | This policy waits a random interval selected from an exponentially growing range before sending the next request |
 Fixed Interval | This policy waits the specified interval before sending the next request |
