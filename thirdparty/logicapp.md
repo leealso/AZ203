@@ -107,11 +107,11 @@ Below an example of an Azure Logic App retry policy JSON:
 ## Logic Apps vs Functions vs WebJobs vs Flow
 * Logic apps are good for event driver processes that integrate with other services. They are also declarative instead of code-first.
 * Functions are light-weight and code-first.
-* For processing queue messages, Logic Apps, Functions, and WebJobs are all appropiate, but the likely best answer woulb be Functions.
+* For processing queue messages, Logic Apps, Functions, and WebJobs are all appropiate, but Azure Functions offer more developer productivity than Azure App Service WebJobs does. It also offers more options for programming languages, development environments, Azure service integration, and pricing. For most scenarios, it's the best choice.
 * WebJobs have generally been superceded by Functions but are able to run in the same Azure DevOps environment as Web Apps.
 
 ## References
 * [Overview - What is Azure Logic Apps?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview).
 * [Overview: Azure serverless with Azure Logic Apps and Azure Functions](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-serverless-overview).
 * [Handle errors and exceptions in Azure Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-exception-handling).
-* [What are Microsoft Flow, Logic Apps, Functions, and WebJobs?](https://docs.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs).
+* [What are Microsoft Flow, Logic Apps, Functions, and WebJobs?](https://docs.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs)
