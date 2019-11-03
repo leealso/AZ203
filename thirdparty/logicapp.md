@@ -1,8 +1,8 @@
 # Develop an App Service Logic App
 
 ## Objectives
-* Create a multi-activity workflow.
-* Understand how to handle exceptions thrown during app exceution.
+* Create a multi-activity workflow using the Logic Apps Designer.
+* Understand how to handle exceptions thrown during app execution.
 
 ## What is Azure Logic App?
 Azure Logic Apps implement event-driven serverless, potentially long-running, workflows. They can represent complex processes instead of requiring quick and simple excecution like Azure Funtions.
@@ -85,13 +85,33 @@ Exponential Interval | This policy waits a random interval selected from an expo
 Fixed Interval | This policy waits the specified interval before sending the next request |
 None | Don't resend the request |
 
-### Concurrency/Scaling
-* The Azure Functions runtime will receive up to 16 messages and run functions for each in parallel.
-* When the number of messages being processed gets down to 8, the runtime gets another batch of 16 and processes those.
-* Any VM processing messages in the function app will only process a maximun of 24 parallel messages.
-* There can be a maximun of 16 parallel functions running at any one time and 24 parallel messages pulled out of the queue.
+Below an example of an Azure Logic App retry policy JSON:
+```json
+"<action-name>": {
+   "type": "<action-type>", 
+   "inputs": {
+      "<action-specific-inputs>",
+      "retryPolicy": {
+         "type": "<retry-policy-type>",
+         "interval": "<retry-interval>",
+         "count": <retry-attempts>,
+         "minimumInterval": "<minimum-interval>",
+         "maximumInterval": "<maximun-interval>"
+      },
+      "<other-action-specific-inputs>"
+   },
+   "runAfter": {}
+}
+```
+
+## Logic Apps vs Functions vs WebJobs vs Flow
+* Logic apps are good for event driver processes that integrate with other services. They are also declarative instead of code-first.
+* Functions are light-weight and code-first.
+* For processing queue messages, Logic Apps, Functions, and WebJobs are all appropiate, but the likely best answer woulb be Functions.
+* WebJobs have generally been superceded by Functions but are able to run in the same Azure DevOps environment as Web Apps.
 
 ## References
-* [App Service Documentation](https://docs.microsoft.com/en-us/azure/app-service/).
-* [Create an App Service app with deployment from GitHub using Azure CLI](https://docs.microsoft.com/bs-latn-ba/azure/app-service/scripts/cli-deploy-github).
-* [Web App for Containers](https://azure.microsoft.com/en-us/services/app-service/containers/).
+* [Overview - What is Azure Logic Apps?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview).
+* [Overview: Azure serverless with Azure Logic Apps and Azure Functions](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-serverless-overview).
+* [Handle errors and exceptions in Azure Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-exception-handling).
+* [What are Microsoft Flow, Logic Apps, Functions, and WebJobs?](https://docs.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs).
