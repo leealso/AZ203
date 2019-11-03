@@ -82,6 +82,7 @@ namespace az203.thirdparty.search
                 Fields = FieldBuilder.BuildForType<Hotel>()
             };
 
+            // Creates a new Azure Search index
             serviceClient.Indexes.Create(definition);
 
             // Creates a new index client for querying and managing documents in a given index
@@ -135,7 +136,9 @@ namespace az203.thirdparty.search
             // Client that can be used to query an Azure Search index and upload, merge, or delete documents
             var indexClientForQuery = new SearchIndexClient(
                searchServiceName, 
-               "hotels", new SearchCredentials(queryApiKey)
+               "hotels", 
+               // Credentials used to authenticate to an Azure Search service
+               new SearchCredentials(queryApiKey)
             );
 
             // Parameters for filtering, sorting, faceting, paging, and other search query behaviors
@@ -188,7 +191,6 @@ Packages required:
 * [Microsoft.Azure.Search](https://www.nuget.org/packages/Microsoft.Azure.Search)
 
 ## References
-* [Overview - What is Azure Logic Apps?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview).
-* [Overview: Azure serverless with Azure Logic Apps and Azure Functions](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-serverless-overview).
-* [Handle errors and exceptions in Azure Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-exception-handling).
-* [What are Microsoft Flow, Logic Apps, Functions, and WebJobs?](https://docs.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs)
+* [How to use Azure Search from a .NET Application](https://docs.microsoft.com/en-us/azure/search/search-howto-dotnet-sdk).
+* [How full text search works in Azure Search](https://docs.microsoft.com/en-us/azure/search/search-lucene-query-architecture).
+* [How to rebuild an Azure Search index](https://docs.microsoft.com/en-us/azure/search/search-howto-reindex).

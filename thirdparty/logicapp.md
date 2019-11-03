@@ -111,7 +111,7 @@ Below an example of an Azure Logic App retry policy JSON:
 * WebJobs is better when you have an App Service app for which you want to run code snippets, and you want to manage them together in the same Azure DevOps environment.
 
 ## References
-* [Overview - What is Azure Logic Apps?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview).
+* [Overview - What is Azure Logic Apps?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview)
 * [Overview: Azure serverless with Azure Logic Apps and Azure Functions](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-serverless-overview).
 * [Handle errors and exceptions in Azure Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-exception-handling).
 * [What are Microsoft Flow, Logic Apps, Functions, and WebJobs?](https://docs.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs)
