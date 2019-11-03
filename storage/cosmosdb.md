@@ -56,7 +56,7 @@ az cosmosdb show `
  --query "documentEndpoint"
 
 # Delete resource group
-az group delete
+az group delete `
  --name resourceGroupName `
  --yes
 ```
