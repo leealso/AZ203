@@ -69,7 +69,8 @@ namespace az203
         }
 
         public static QSTodoService DefaultService {
-            get {
+            get 
+            {
                 return instance;
             }
         }
@@ -100,13 +101,13 @@ namespace az203
                 // If a table with the same name already exists, the newly defined columns in the table definition will be added to the table
                 // If no table with the same name exists, a table with the specified schema will be created
                 store.DefineTable<ToDoItem>();
-
-				// Initializes the sync context
+                
+                // Initializes the sync context
                 // Uses the default conflict handler, which fails on conflict
                 await client.SyncContext.InitializeAsync(store);
                 
                 store = null;
-			} 
+            } 
             catch Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -124,7 +125,6 @@ namespace az203
 
                 if(pullData) 
                 {
-                    
                     // Creates a query for the current table
                     var query = todoTable.CreateQuery();
                     // Pulls all items that match the given query from the associated remote table
