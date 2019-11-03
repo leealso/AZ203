@@ -90,11 +90,11 @@ Below an example of an Azure Logic App retry policy JSON:
 "<action-name>": {
    "type": "<action-type>", 
    "inputs": {
-      "<action-specific-inputs>",
+      "<action-specific-inputs>"
       "retryPolicy": {
          "type": "<retry-policy-type>",
          "interval": "<retry-interval>",
-         "count": <retry-attempts>,
+         "count": "<retry-attempts>",
          "minimumInterval": "<minimum-interval>",
          "maximumInterval": "<maximun-interval>"
       },
