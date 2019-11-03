@@ -99,10 +99,11 @@ namespace az203.paas.functions
             tableBindings.Add(JsonConvert.DeserializeObject<Order>(queueItem.AsString));
         }
 
+        // Function used to process mesages from the poison queue
         [FunctionName("ProcessOrders-Poison")]
         public static void ProcessFailedOrders(
             [QueueTrigger("incoming-orders-poison", Connection = "AzureWebJobsStorage")]
-            CloudQueueMessage queueItem, 
+                CloudQueueMessage queueItem, 
             ILogger log)
         {
             log.LogInformation($"C# Queue trigger function processed: {queueItem}");
@@ -117,7 +118,19 @@ Packages required:
 * [Microsoft.NET.Sdk.Functions](https://www.nuget.org/packages/Microsoft.NET.Sdk.Functions)
 * [Microsoft.Azure.WebJobs.Extensions.Storage](https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.Storage)
 
+## Understand Azure Functions Queue Trigger/Binding Scalability
+### Exception handling
+If a queue triggered function throws an exception, the Azure Funstions runtime will capture the exception and will retry calling the function 5 times(including the first call).
+
+If those all fail, then the runtime will pt the message in a queue named *<originalqueuename>-poison*. You can then write a function to process those poison messages.
+
+### Concurrency/Scaling
+* The Azure Functions runtime will receive up to 16 messages and run functions for each in parallel.
+* When the number of messages being processed gets down to 8, the runtime gets another batch of 16 and processes those.
+* Any VM processing messages in the function app will only process a maximun of 24 parallel messages.
+* There can be a maximun of 16 parallel functions running at any one time and 24 parallel messages pulled out of the queue.
+
 ## References
-* [App Service Documentation](https://docs.microsoft.com/en-us/azure/app-service/).
-* [Create an App Service app with deployment from GitHub using Azure CLI](https://docs.microsoft.com/bs-latn-ba/azure/app-service/scripts/cli-deploy-github).
-* [Web App for Containers](https://azure.microsoft.com/en-us/services/app-service/containers/).
+* [Work with Azure Functions Core Tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local).
+* [Azure Table storage bindings for Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-table).
+* [Azure Queue storage bindings for Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-queue).
