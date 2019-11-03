@@ -9,7 +9,7 @@
 Azure Functions are an implementation of "serverless computing" that allows running of code on-demand. Functions are event-driven and short-lived, and provide for automatic scalability to meet demand.
 
 ## Create a Queue Triggered Function with Table Output
-1. Create a Storage Queue a put a message.
+1. Create a Storage Queue and put a message.
 ```powershell
 # Set variables
 $resourceGroupName = "functions-example"
@@ -64,7 +64,7 @@ az group delete `
  --no-wait
 ```
 
-2. Create a function triggered by a queue and outputs to Storage Table.
+2. Create a function triggered by a Storage Queue message and that outputs to a Storage Table.
 ```csharp
 using System;
 using Microsoft.Azure.WebJobs;
@@ -78,12 +78,16 @@ namespace az203.paas.functions
 {
     public static class OrderProcessor
     {
+        // Marks the method as a function entry point
         [FunctionName("ProcessOrders")]
         public static void ProcessOrders(
-            [QueueTrigger("incoming-orders", Connection = "AzureWebJobsStorage")],
-            CloudQueueMessage queueItem,
+            // Specifies the trigger type and binds input data to a method parameter
+            [QueueTrigger("incoming-orders", Connection = "AzureWebJobsStorage")]
+                // Represents a message in the Microsoft Azure Queue service
+                CloudQueueMessage queueItem,
+            // Binds a parameter to an Azure Table or Table entity
             [Table("Orders", Connection = "AzureWebJobsStorage")]
-            ICollector<Order> tableBindings,
+                ICollector<Order> tableBindings,
             ILogger log)
         {
             log.LogInformation($"Processing Order (mesage Id): {queueItem.Id}");
@@ -91,6 +95,7 @@ namespace az203.paas.functions
             log.LogInformation($"Queue Insertion Time: {queueItem.InsertionTime}");
             log.LogInformation($"Queue Insertion Time: {queueItem.ExpirationTime}");
             log.LogInformation($"Data: {queueItem.AsString}");
+            // Adds an Order to the Azure Table
             tableBindings.Add(JsonConvert.DeserializeObject<Order>(queueItem.AsString));
         }
 
