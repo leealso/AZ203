@@ -59,11 +59,13 @@ namespace az203
 #if OFFLINE_SYNC_ENABLED
             InitializeStoreAsync().ContinueWith(_ =>
             {
-                // Returns a IMobileServiceSyncTable<T> instance, which provides strongly typed data operations for local table
+                // Returns a IMobileServiceSyncTable<T> instance, which provides strongly 
+                // typed data operations for local table
                 todoTable = client.GetSyncTable<ToDoItem>();
             });
 #else
-            // Returns a IMobileServiceTable<T> instance, which provides strongly typed data operations for that table
+            // Returns a IMobileServiceTable<T> instance, which provides strongly typed 
+            // data operations for that table
             todoTable = client.GetTable<ToDoItem>();
 #endif
         }
@@ -98,8 +100,10 @@ namespace az203
                 // A SQLite based implementation of MobileServiceStore
                 var store = new MobileServiceSQLiteStore("localstore.db");
                 // Defines schema of a table in the local store
-                // If a table with the same name already exists, the newly defined columns in the table definition will be added to the table
-                // If no table with the same name exists, a table with the specified schema will be created
+                // If a table with the same name already exists, the newly defined 
+                // columns in the table definition will be added to the table
+                // If no table with the same name exists, a table with the specified 
+                // schema will be created
                 store.DefineTable<ToDoItem>();
                 
                 // Initializes the sync context
