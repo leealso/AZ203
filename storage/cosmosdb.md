@@ -221,7 +221,6 @@ namespace az203.storage.cosmosdb
     }
 }
 ```
-
 Packages required:
 * [Microsoft.Azure.DocumentDB.Core](https://www.nuget.org/packages/Microsoft.Azure.DocumentDB.Core)
 
