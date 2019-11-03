@@ -75,44 +75,21 @@ az group delete `
 ```
 2. Create Logic App using the Logic Apps Designer in the Azure Portal.
 
-## Create an App Service Web App using Containers and Docker Hub using CLI and GitHub
-```powershell
-# Set variables
-$resourceGroupName = "webapps-example"
-$servicePlanName = "service-plan"
-$appName = "app-example"
-$container = "microsoft/dotnet-samples:aspnetapp"
+## Handle Exceptions and Retries
+Logic Apps support robust handling/retries activities on error. These can be confiured in boh the GUI and JSON.
 
-# Create a resource group
-az group create `
- -n $resourceGroupName `
- -l westus
+Type | Description |
+Default | This policy sends up to four retries at exponentially increasing intervals, which scale by 7.5 seconds but are capped between 5 and 45 seconds. |
+Exponential Interval |  |
+Fixed Interval |  |
+None |  |
+ 
 
-# Create an app service plan on
-az appservice plan create `
- -n $servicePlanName `
- -g $resourceGroupName `
- --sku FREE `
- --is-linux
-
-# Create a web app using a container
-az webapp create `
- -n $appName `
- -g $resourceGroupName `
- --plan $servicePlanName `
- --deployment-container-image-name $container
-
-# Configure web app settings
-az webapp config appsettings set `
- -n $appName `
- -g $resourceGroupName `
- --settings WEBSITES_PORT=80
-
-# Delete resource group
-az group delete `
- -n $resourceGroupName `
- --yes
-```
+### Concurrency/Scaling
+* The Azure Functions runtime will receive up to 16 messages and run functions for each in parallel.
+* When the number of messages being processed gets down to 8, the runtime gets another batch of 16 and processes those.
+* Any VM processing messages in the function app will only process a maximun of 24 parallel messages.
+* There can be a maximun of 16 parallel functions running at any one time and 24 parallel messages pulled out of the queue.
 
 ## References
 * [App Service Documentation](https://docs.microsoft.com/en-us/azure/app-service/).

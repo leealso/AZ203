@@ -243,11 +243,11 @@ You can only have two of Consitency, Availability and Partition Tolerance.
 
 Level | Overview | CAP | Users |
 ------------ | -------------|------------ | -------------|
-Strong Consistency | All writes are read immediately by anyone. Everyone sees the same thing. Similar to existing RDBMS.  | C: Highest <br> A: Lowest <br> P: Lowest | Financial, inventory, scheduling |
-Bounded Stateless | Trades off lag for ensuring reads return the most recent write. Lag can be specified in time or number of operations.  | C: Consistent to a bound <br> A: Low <br> P: Low | Apps showing status, tracking. scores, tickets |
-Session | Default consistency in Cosmos DB. All reads on the same session (connection) are consistent.  | C: Strong for the session <br> A: High <br> P: Moderate | Social apps, fitness apps, shopping cart |
-Consistent Prefix | Bounded staleness without lag/delay. You will need to read consistent data, but it may be an older version.  | C: Low <br> A: High <br> P: Low | Social media (comments, likes), apps with updates like scores |
-Eventual Consistency | Highest availabilty and performance, but no guarantee that a read within any specific time, for anyone, sees the latest data. But will eventually be consistent - no loss due to high availability.  | C: Lowest <br> A: Highest <br> P: Highest | Non-ordered updates like reviews and ratings, aggregated status |
+Strong Consistency | All writes are read immediately by anyone. Everyone sees the same thing. Similar to existing RDBMS | C: Highest <br> A: Lowest <br> P: Lowest | Financial, inventory, scheduling |
+Bounded Stateless | Trades off lag for ensuring reads return the most recent write. Lag can be specified in time or number of operations | C: Consistent to a bound <br> A: Low <br> P: Low | Apps showing status, tracking. scores, tickets |
+Session | Default consistency in Cosmos DB. All reads on the same session (connection) are consistent | C: Strong for the session <br> A: High <br> P: Moderate | Social apps, fitness apps, shopping cart |
+Consistent Prefix | Bounded staleness without lag/delay. You will need to read consistent data, but it may be an older version | C: Low <br> A: High <br> P: Low | Social media (comments, likes), apps with updates like scores |
+Eventual Consistency | Highest availabilty and performance, but no guarantee that a read within any specific time, for anyone, sees the latest data. But will eventually be consistent - no loss due to high availability | C: Lowest <br> A: Highest <br> P: Highest | Non-ordered updates like reviews and ratings, aggregated status |
 
 ## References
 * [Consistency levels in Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/consistency-levels).
