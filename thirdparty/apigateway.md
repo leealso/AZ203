@@ -14,6 +14,7 @@ The purpose of an API Gateway is to take requests from applications over the net
 
 ## Policies
 Policies are decalarative capabilities of the API service to change the behavior of your API. There are three primary types:
+
 Type | Description | Use cases |
 ---- | ----------- | --------- |
 Inbound | Applied on requests when coming in to the API | Authentication, rate limiting, caching |

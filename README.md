@@ -18,7 +18,7 @@ Study material for the AZ 203 certification.
 ## Connect to and Consume Azure and Third-Party Services
 1. [Develop an App Service Logic App](thirdparty/logicapp.md).
 2. [Integrate Azure Search within Solutions](thirdparty/search.md).
-3. [Establish API Gateways](thirdparty/logicapp.md).
+3. [Establish API Gateways](thirdparty/apigateway.md).
 4. [Develop Event-Based Solutions](thirdparty/logicapp.md).
 5. [Develop Message Based Solutions](thirdparty/logicapp.md).
 
