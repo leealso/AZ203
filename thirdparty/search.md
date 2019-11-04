@@ -72,7 +72,11 @@ namespace az203.thirdparty.search
 
             // Client that can be used to manage and query indexes and documents, 
             // as well as manage other resources, on an Azure Search service
-            var serviceClient = new SearchServiceClient(searchServiceName, new SearchCredentials(adminApiKey));
+            var serviceClient = new SearchServiceClient(
+               searchServiceName, 
+               // Credentials used to authenticate to an Azure Search service
+               new SearchCredentials(adminApiKey)
+            );
 
             // Represents an index definition in Azure Search, which describes the 
             // fields and search behavior of an index
@@ -133,11 +137,11 @@ namespace az203.thirdparty.search
             // Sends a batch of upload, merge, and/or delete actions to the Azure Search index
             indexClientForUpload.Documents.Index(batch);
 
-            // Client that can be used to query an Azure Search index and upload, merge, or delete documents
+            // Client that can be used to query an Azure Search index and upload, 
+            // merge, or delete documents
             var indexClientForQuery = new SearchIndexClient(
                searchServiceName, 
                "hotels", 
-               // Credentials used to authenticate to an Azure Search service
                new SearchCredentials(queryApiKey)
             );
 
