@@ -10,7 +10,7 @@ API Management is an Azure service that helps you define APIs that can be used i
 The purpose of an API Gateway is to take requests from applications over the network and then forward them to a backend service. During that process it can do things like authentication, rate limiting, data transformation, and apply policies both to inbound and outbound information.
 
 ## Policies
-Policies are decalarative capabilities of the API service to change the behavior of your API. There are three primary types:
+Policies are decalarative capabilities of the API service to change the behavior of your API.
 
 Type | Description | Use cases |
 ---- | ----------- | --------- |
