@@ -13,7 +13,7 @@ Event Grid focuses on a reactive model of messaging where messages represent "ev
 
 It can be used to wire code to react to both Azure and non-Azure events, and for near real-time event scenarios. It's a great way of building a backbone for serverless and event-driven applications (reactive programming/applications, and cloud-native 12-factor applications).
 
-<p style="text-align:center">
+<p align="center">
     <img src="https://docs.microsoft.com/en-us/azure/event-grid/media/overview/functional-model.png"/>
 </p>
 
