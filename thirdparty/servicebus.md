@@ -20,86 +20,44 @@ Other benefits include session management, routing, dead-lettering, scheduling, 
     <img src="https://docs.microsoft.com/en-us/azure/service-bus-messaging/media/service-bus-messaging-overview/about-service-bus-topic.png"/>
 </p>
 
-### Characteristics
-* Event Grid gives you reliable event delivery at **massive scale** (scales automatically and the cost per message is lower than Service Bus).
-* Simplify event delivery by providing multiple protocols being HTTP webhooks the most common one.
-* Example uses: serverless application architectures, **ops automation**, or application integration.
 
-### Concepts
-There are five main concepts in Azure Event Grid:
-* **Events** - What happened.
-* **Event sources** - Where the event took place.
-* **Topics** - The endpoint where publishers send events.
-* **Event subscriptions** - The endpoint or built-in mechanism to route events, sometimes to more than one handler. Subscriptions are also used by handlers to intelligently filter incoming events.
-* **Event handlers** - The app or service reacting to the event.
-
-## Create an event subscription
-1. Create a Search Service ang get access keys.
+## Create a Service Bus queue using Azure CLI and Powershell
 ```powershell
-$resourceGroup = "eventgrid"
+# Set variables
+$resourceGroup = "servicebus"
 $location = "westus"
-$storageAccount = "laaz203egsa"
+$serviceBusNamespace = "az203sb"
+$queueName = "queue"
 
+# Create a new resource group
 az group create `
-    -n $resourceGroup 
+    -n $resourceGroup `
     -l $location
 
-az storage account create `
-    -n $storageAccount `
+# Create a Service Bus Namespace
+az servicebus namespace create `
+    --n $serviceBusNamespace `
+    -g $resourceGroup
+
+# List the keys and connection strings of Authorization Rule for Service Bus Namespace
+az servicebus namespace authorization-rule keys list `
     -g $resourceGroup `
-    -l $location `
-    --sku Standard_LRS `
-    --kind StorageV2 
+    --namespace-name $serviceBusNamespace `
+    --name RootManageSharedAccessKey `
+    --query primaryConnectionString
 
-$storageAccountKey = $(
-    az storage account keys list `
-        -g $resourceGroup `
-        --account-name $storageAccount `
-        --query "[0].value" `
-        --output tsv
-)
+# Create the Service Bus Queue
+az servicebus queue create `
+    --namespace-name $serviceBusNamespace `
+    -g $resourceGroup `
+    -n $queueName 
 
-$storageAccountID = $(
-    az storage account show `
-        -n $storageAccount `
-        -g $resourceGroup `
-        --query id `
-        --output tsv
-)
-
-az eventgrid event-subscription create `
-    --source-resource-id $storageAccountID `
-    --name storagesubscription `
-    --endpoint-type WebHook `
-    --endpoint "https://mywebhook.com/api/test" `
-    --included-event-types "Microsoft.Storage.BlobCreated" `
-    --subject-begins-with "/blobServices/default/containers/testcontainer/"
-
-az storage container create `
-    --account-name $storageAccount `
-    --account-key $storageAccountKey `
-    --name testcontainer
-
-az storage blob upload `
-    --account-name $storageAccount `
-    --account-key $storageAccountKey `
-    --file testfile.txt `
-     --container-name testcontainer  `
-     --name testfile.txt
-  
-az storage blob delete `
-    --account-name $storageAccount `
-    --account-key $storageAccountKey `
-    --container-name testcontainer  `
-    --name testfile.txt
-  
-az eventgrid event-subscription delete `
-    --resource-id $storageAccountID `
-    --name storagesubscription 
-
-az group delete 
-    -n $resourceGroup 
-    --yes
+# Creates a Service Bus queue in the specified Service Bus namespace
+New-AzureRmServiceBusQueue `
+    -ResourceGroupName $resourceGroup `
+    -NamespaceName $serviceBusNamespace `
+    -name $queueName `
+    -EnablePartitioning $false
 ```
 
 ## References
