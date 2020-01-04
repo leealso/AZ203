@@ -20,7 +20,7 @@ Study material for the AZ 203 certification.
 2. [Integrate Azure Search within Solutions](thirdparty/search.md).
 3. [Establish API Gateways](thirdparty/apigateway.md).
 4. [Develop Event-Based Solutions](thirdparty/eventgrid.md).
-5. [Develop Message Based Solutions](thirdparty/logicapp.md).
+5. [Develop Message Based Solutions](thirdparty/servicebus.md).
 
 ## Implement Security, Monitor, and Optimization
 1. [Implement Secure Acces to Services, Secrets, and Data]().

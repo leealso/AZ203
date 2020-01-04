@@ -1,20 +1,23 @@
-# Develop Event-Based Solutions
+# Develop Message Based Solutions
 
 ## Objectives
-* Understand topics and subscriptions that form the publish and subscribe model.
-* Understand several of the means of configuring routing of events.
-* Understand JSON configuration content and structure.
-* Know how to configure a subscription with Azure CLI.
+* Creating a service bus namespace and queue with CLI.
+* Sending and receiving messages with C#.
+* Understand concepts in message correlation.
 
-## What is Event Grid?
-Azure Event Grid is a fully managed event routing service that provides for event consumption using a publish-subscribe model.
+## What is Service Bus?
+Azure Service Bus povides a fully managed enterprise message broker. It is commonly used to build decoupled applications and services.
 
-Event Grid focuses on a reactive model of messaging where messages represent "events" instead of "commands" which are more of a focus of messaging systems (such as Service Bus).
+Services Bus provides many benefits over Azure Table Queues, including not only queues but topics for multicast-delivery.
 
-It can be used to wire code to react to both Azure and non-Azure events, and for near real-time event scenarios. It's a great way of building a backbone for serverless and event-driven applications (reactive programming/applications, and cloud-native 12-factor applications).
+Other benefits include session management, routing, dead-lettering, scheduling, deferral, transactions, and many others. But this also adds significatn cost comparred to Table Storage Queues.
 
 <p align="center">
-    <img src="https://docs.microsoft.com/en-us/azure/event-grid/media/overview/functional-model.png"/>
+    <img src="https://docs.microsoft.com/en-us/azure/service-bus-messaging/media/service-bus-messaging-overview/about-service-bus-queue.png"/>
+</p>
+
+<p align="center">
+    <img src="https://docs.microsoft.com/en-us/azure/service-bus-messaging/media/service-bus-messaging-overview/about-service-bus-topic.png"/>
 </p>
 
 ### Characteristics
