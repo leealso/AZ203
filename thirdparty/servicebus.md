@@ -87,13 +87,14 @@ namespace az203.thirparty.servicebus
             const int delay = 2000;
             const int numMessageToSend = 10;
 
+            // QueueClient can be used for all basic interactions with a Service Bus Queue
             var queueClient = new QueueClient
             (
                 serviceBusConnectionString, 
                 queueName
             );
 
-            // Register the function that will process messages
+            // Registers a message handler and begins a new thread to receive messages
             queueClient.RegisterMessageHandler(
                 async (message, cancellationToken) => 
                 {
@@ -104,8 +105,11 @@ namespace az203.thirparty.servicebus
                     if (delay > 0)
                         await Task.Delay(delay);
                     
+                    // Completes a Message using its lock token. 
+                    // This will delete the message from the queue
                     await queueClient.CompleteAsync(message.SystemProperties.LockToken);
                 },
+                // Provides options associated with message pump processing
                 new MessageHandlerOptions
                 (
                     exception => 
@@ -119,7 +123,10 @@ namespace az203.thirparty.servicebus
                     }
                 )
                 {
+                    // Maximum number of concurrent calls to the callback the message pump should initiate
                     MaxConcurrentCalls = 5,
+                    // Indicates whether the message pump should call CompleteAsync 
+                    // on messages after the callback has completed processing
                     AutoComplete = false
                 }
             );
@@ -131,11 +138,13 @@ namespace az203.thirparty.servicebus
 
                 Console.WriteLine($"Sending message: {messageBody}");
 
+                // Sends a message to Service Bus
                 await queueClient.SendAsync(message);
             }
 
             Task.Delay(30000).Wait();
 
+            // Closes the Client and the connections opened by it
             await queueClient.CloseAsync();
         }
     }
