@@ -151,11 +151,22 @@ namespace az203.thirparty.servicebus
 }
 ```
 
+## Correlation and routing in Service Bus
+Several of the Message class's properties can be used to implement message correlation and routing: To, ReplyTo, ReplyToSessionId, MessageId, CorrelationId, and SessionId. These can be used to implement several patterns:
+* Simple Request/Reply.
+* Multicast Request/Reply.
+* Multiplexing.
+* Multiplexed Request/Reply.
+
+### Examples of request/reply patterns
+* You can set the reply message's CorrelationId to the request message's MessageId and send reply to a single reply queue. This way you can match a response to a request but you can't match a response to a client.
+* To match a response to a client you can use a reply queue per client and set the request message's ReplyTo to the client's reply queue.
+* For better scalability you can use a single reply queue and set the response message's ReplyToSessionId to the request message's SessionId and send reply to a single queue or queue in the request message's ReplyTo.
+
 ## References
-* [Event Grid](https://azure.microsoft.com/en-us/services/event-grid/).
-* [What is Azure Event Grid?](https://docs.microsoft.com/en-us/azure/event-grid/overview)
+* [What is Azure Service Bus?](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview).
 * [Choose between Azure messaging services - Event Grid, Event Hubs, and Service Bus](https://docs.microsoft.com/en-us/azure/event-grid/compare-messaging-services).
-* [Azure Event Grid Viewer](https://docs.microsoft.com/en-us/samples/azure-samples/azure-event-grid-viewer/azure-event-grid-viewer/).
-* [Azure CLI samples for Event Grid](https://docs.microsoft.com/en-us/azure/event-grid/cli-samples).
-* [The Reactive Manifesto](https://www.reactivemanifesto.org).
-* [AThe Twelve-Factor App](https://12factor.net).
+* [Quickstart: Use Azure PowerShell to create a Service Bus queue](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-powershell).
+* [Quickstart: Use the Azure CLI to create a Service Bus queue](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-cli).
+* [Get started with Service Bus queues](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-dotnet-get-started-with-queues).
+* [Messages, payloads, and serialization](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messages-payloads).
