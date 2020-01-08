@@ -1,7 +1,7 @@
 # Develop Message Based Solutions
 
 ## Objectives
-* Creating a service bus namespace and queue with CLI.
+* Creating a service bus namespace and queue with Azure CLI.
 * Sending and receiving messages with C#.
 * Understand concepts in message correlation.
 

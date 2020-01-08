@@ -23,6 +23,6 @@ Study material for the AZ 203 certification.
 5. [Develop Message Based Solutions](thirdparty/servicebus.md).
 
 ## Implement Security, Monitor, and Optimization
-1. [Implement Secure Acces to Services, Secrets, and Data]().
-2. [Monitor Azure Solutions]().
-3. [Optimize Azure Solutions]().
+1. [Implement Secure Acces to Services, Secrets, and Data](secure-monitor-optimize/secure.md).
+2. [Monitor Azure Solutions](secure-monitor-optimize/monitor.md).
+3. [Optimize Azure Solutions](secure-monitor-optimize/optimize.md).

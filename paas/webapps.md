@@ -92,7 +92,7 @@ az group create `
  -n $resourceGroupName `
  -l westus
 
-# Create an app service plan on
+# Create an app service plan
 az appservice plan create `
  -n $servicePlanName `
  -g $resourceGroupName `
