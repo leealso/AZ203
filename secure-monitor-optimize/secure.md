@@ -79,9 +79,9 @@ az role definition list `
     --output json `
     --query '[].{"actions":permissions[0].actions, "notActions":permissions[0].notActions}'
 
-$appName = "webApp"
 $resourceGroup = "resourceGroup"
 $servicePlan = "webAppServicePlan"
+$appName = "webApp"
 $location = "westus"
 
 # Create a resource group
@@ -120,7 +120,7 @@ az role assignment delete
     --assignee $servicePrincipal.appId 
     --role "Contributor"
 
-$sysid = (
+$systemAssignedId = (
     # Assign or disable managed service identity to the web app
     az webapp identity assign `
         -g $resourceGroup `
@@ -148,6 +148,94 @@ az group delete
 ```
 
 ## Secure access to Blobs with a SAS token
+A shared access signature (SAS) provides delegated access to resources in your storage account. With a SAS, you can grant clients access to resource in your storage account, without sharing account keys.
+
+A SAS gives you granular control over the type of access you grant to clients who have the SAS, including:
+* The interval over which the SAS is invalid.
+* The permissions granted by the SAS.
+* An optional IP address or range of IP addresses.
+* Teh protocol over which Azure Storage will accept the SAS.
+
+```powershell
+$resourceGroup = "resourceGroup"
+$storageAccount = "storageAccount"
+$container = "container"
+$location = "westus"
+
+# Create a resource group
+az group create `
+    -n $resourceGroup ` 
+    -l $location
+    
+# Create Storage Account
+az storage account create `
+ -g $resourceGroup `
+ -n $storageAccount `
+ -l $location `
+ --sku Standard_LRS
+
+
+$storageAccountKey = $(
+    # List the primary and secondary keys for a storage account
+    az storage account keys list `
+        --account-name $storageAccount `
+        -g $resourceGroup `
+        --query "[0].value" `
+        --output tsv
+)
+
+# Create a container in a storage account
+az storage container create `
+    --account-name $storageAccount `
+    --account-key $storageAccountKey `
+    --name $container
+
+# Upload a file to a storage blob
+az storage blob upload `
+    --account-name $storageAccount `
+    --account-key $storageAccountKey `
+    --file image.jpg `
+    --container-name $container `
+    --name image.jpg
+
+# Create the url to access a blob
+az storage blob url `
+    --account-name $storageAccount `
+    --account-key $storageAccountKey `
+    --container-name $container `
+    --name image.jpg
+
+$now = [DateTime]::UtcNow
+$start = $now.ToString('yyyy-MM-ddTHH:mmZ')
+$end = $now.AddMinutes(5).ToString('yyyy-MM-ddTHH:mmZ')
+
+$sasToken = (
+    # Generates a shared access signature for the blob
+    az storage blob generate-sas `
+        --account-name $storageAccount `
+        --account-key $storageAccountKey `
+        --container-name $container `
+        --name image.jpg `
+        --permissions r `
+        --start $start `
+        --expiry $end
+)
+
+# Create the url to access a blob with the SAS token
+az storage blob url `
+    --account-name $storageAccount `
+    --account-key $storageAccountKey `
+    --container-name $container `
+    --name image.jpg `
+    --sas $sasToken `
+    -o tsv
+
+# Delete resource group
+az group delete 
+    -n $resourceGroup 
+    --yes
+```
+
 ## Securely store Web App secrets in Key Vault
 ## Secure access to Storage Accounts with MSI
 ## Implement Dynamic Data Masking and Always Encrypted
