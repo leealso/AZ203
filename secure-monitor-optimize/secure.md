@@ -1,7 +1,8 @@
 # Implement Secure Access to Services, Secrets, and Data
 
 ## Objectives
-* Create and perform fundamental operations for Service Principals with Azure CLI.
+* Configuring MSI on a web app.
+* Granting access to secrets in Key Vault to the MSI Service Principal.
 
 ## What is Service Principal?
 Service Principals are identities in Azure Active Directory. A Service Principal (SP) can represent an application, service, or Azure resource (such as a VM). They are similar to a user account in this sense, but purely for non-human based identity.
@@ -116,8 +117,8 @@ az role assignment create `
     --scope $webApp.id
 
 # Delete role assignments
-az role assignment delete 
-    --assignee $servicePrincipal.appId 
+az role assignment delete `
+    --assignee $servicePrincipal.appId `
     --role "Contributor"
 
 $systemAssignedId = (
@@ -142,8 +143,8 @@ az ad sp delete `
     --id $servicePrincipal.appId
 
 # Delete resource group
-az group delete 
-    -n $resourceGroup 
+az group delete `
+    -n $resourceGroup `
     --yes
 ```
 
@@ -173,7 +174,6 @@ az storage account create `
  -n $storageAccount `
  -l $location `
  --sku Standard_LRS
-
 
 $storageAccountKey = $(
     # List the primary and secondary keys for a storage account
@@ -231,12 +231,133 @@ az storage blob url `
     -o tsv
 
 # Delete resource group
-az group delete 
-    -n $resourceGroup 
+az group delete `
+    -n $resourceGroup `
     --yes
 ```
 
 ## Securely store Web App secrets in Key Vault
+Key Vault is a service for securelt storeing secrets. It will lock up those secrets in a vault that is either software or hardware encrypted. It will then only allow access to those secrets by those granted permissions.
+
+But this is a problem. Your application would need to keep the credentials for authenticating with Key Vault within its configuration, hence makng the whole security thing insecure. This has been solved with MSI.
+
+```powershell
+$resourceGroup = "resourceGroup"
+$keyVault = "keyVault"
+$servicePrincipalName = "servicePrincipal"
+$location = "westus"
+
+# Create a resource group
+az group create `
+    -n $resourceGroup ` 
+    -l $location
+
+# Create a key vault
+az keyvault create `
+    -n $keyVault `
+    -g $resourceGroup `
+    --sku standard 
+
+# Create a secret (if one doesn't exist) or update a secret in a key vault
+az keyvault secret set `
+    --vault-name $keyVault `
+    --name "connectionString" `
+    --value "this is the connection string"
+
+# Get a specified secret from a given key vault
+az keyvault secret show `
+    --vault-name $keyVault `
+    --name connectionString
+
+$servicePrincipal = (
+    # Create a service principal and configure its access to Azure resources
+    az ad sp create-for-rbac `
+        --name $servicePrincipalName | ConvertFrom-Json
+)
+
+# Get the details of a subscription
+$tenantId = (
+    az account show `
+        --query tenantId `
+        -o tsv
+)
+
+# Log in to Azure using service principal
+az login `
+    --service-principal `
+    --username $servicePrincipal.appId `
+    --password $servicePrincipal.password `
+    --tenant $tenantId
+
+# Get a specified secret from a given key vault
+az keyvault secret show `
+    --vault-name $keyVault `
+    --name connectionString
+
+# Log in to Azure using user account
+az login
+
+# Update security policy settings for a key vault
+az keyvault set-policy `
+    --name $keyVault `
+    --spn $servicePrincipal.Name `
+    --secret-permissions get
+
+# Log in to Azure using service principal
+az login `
+    --service-principal `
+    --username $servicePrincipal.appId `
+    --password $servicePrincipal.password `
+    --tenant $tenantId
+
+# Get a specified secret from a given key vault
+az keyvault secret show `
+    --vault-name $keyVault `
+    --name connectionString
+
+# Delete a service principal and its role assignments
+az ad sp delete `
+    --id $servicePrincipal.appId
+
+# Delete a key vault
+az keyvault delete `
+    --name $keyVault
+
+# Delete resource group
+az group delete `
+    -n $resourceGroup `
+    --yes
+```
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Azure.KeyVault;
+
+namespace az203.secure
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            RunAsync().Wait();
+        }
+
+        private static async Task RunAsync()
+        {
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            var keyVaultClient = new KeyVaultClient(
+                new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback)
+            );
+
+            var keyVaultUrl = "https://mykeyvault.vault.azure.net/";
+            var secret = await keyVaultClient.GetSecretAsync(keyVaultUrl, "connectionString");
+            System.Console.WriteLine(secret.Value);
+        }
+    }
+}
+```
 ## Secure access to Storage Accounts with MSI
 ## Implement Dynamic Data Masking and Always Encrypted
 ## Secure access to an AKS cluster
