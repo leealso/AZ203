@@ -4,7 +4,7 @@
 * Configuring MSI on a web app.
 * Granting access to secrets in Key Vault to the MSI Service Principal.
 
-## What is Service Principal?
+## Azure Service Principal
 Service Principals are identities in Azure Active Directory. A Service Principal (SP) can represent an application, service, or Azure resource (such as a VM). They are similar to a user account in this sense, but purely for non-human based identity.
 
 Principals are assigned permissions (roles), granting or revoking access to Azure resources. Often, this is performed in a least-privilege manner.
@@ -33,7 +33,6 @@ Can operate with clients that use MSI:
 * Service Bus
 * Storage
 
-## Create a Service Principal using Azure CLI
 ```powershell
 $servicePrincipalName = "servicePrincipal"
 
