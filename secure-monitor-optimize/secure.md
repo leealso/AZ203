@@ -154,7 +154,7 @@ A SAS gives you granular control over the type of access you grant to clients wh
 * The interval over which the SAS is invalid.
 * The permissions granted by the SAS.
 * An optional IP address or range of IP addresses.
-* Teh protocol over which Azure Storage will accept the SAS.
+* The protocol over which Azure Storage will accept the SAS.
 
 ```powershell
 $resourceGroup = "resourceGroup"
@@ -345,18 +345,21 @@ namespace az203.secure
 
         private static async Task RunAsync()
         {
+            // Instantiate a new KeyVaultClient object, with an access token to Key Vault
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var keyVaultClient = new KeyVaultClient(
                 new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback)
             );
 
             var keyVaultUrl = "https://mykeyvault.vault.azure.net/";
+            // Asynchronously gets a secret
             var secret = await keyVaultClient.GetSecretAsync(keyVaultUrl, "connectionString");
             System.Console.WriteLine(secret.Value);
         }
     }
 }
 ```
+
 ## Secure access to Storage Accounts with MSI
 ## Implement Dynamic Data Masking and Always Encrypted
 ## Secure access to an AKS cluster
