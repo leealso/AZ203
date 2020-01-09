@@ -167,12 +167,12 @@ az group create `
     -n $resourceGroup ` 
     -l $location
     
-# Create Storage Account
+# Create storage account
 az storage account create `
- -g $resourceGroup `
- -n $storageAccount `
- -l $location `
- --sku Standard_LRS
+    -g $resourceGroup `
+    -n $storageAccount `
+    -l $location `
+    --sku Standard_LRS
 
 $storageAccountKey = $(
     # List the primary and secondary keys for a storage account
@@ -274,8 +274,8 @@ $servicePrincipal = (
         --name $servicePrincipalName | ConvertFrom-Json
 )
 
-# Get the details of a subscription
 $tenantId = (
+    # Get the details of a subscription
     az account show `
         --query tenantId `
         -o tsv
@@ -361,6 +361,182 @@ namespace az203.secure
 ```
 
 ## Secure access to Storage Accounts with MSI
+Storage accounts can also be secured with MSI, hence allowing your C# to not require local configuration with any credentials such as storage account keys or SAS tokens.
+
+```powershell
+$resourceGroup = "resourceGroup"
+$servicePrincipalName = "servicePrincipal"
+$storageAccount = "storageAccount"
+$container = "container"
+$location = "westus"
+
+# Create a resource group
+az group create `
+    -n $resourceGroup ` 
+    -l $location
+    
+# Create Storage Account
+az storage account create `
+    -g $resourceGroup `
+    -n $storageAccount `
+    -l $location `
+    --sku Standard_LRS
+
+$servicePrincipal = (
+    # Create a service principal and configure its access to Azure resources
+    az ad sp create-for-rbac `
+        --name $servicePrincipalName | ConvertFrom-Json
+)
+
+# List role assignments
+az role assignment list `
+    --assignee $servicePrincipal.appId
+
+# Delete role assignments
+az role assignment delete `
+    --assignee $servicePrincipal.appId `
+    --role "Contributor"
+
+# List role assignments
+az role assignment list `
+    --assignee $servicePrincipal.appId
+
+$tenantId = (
+    # Get the details of a subscription
+    az account show `
+        --query tenantId `
+        -o tsv
+)
+
+# Log in to Azure using service principal
+az login `
+    --service-principal `
+    --username $servicePrincipal.appId `
+    --password $servicePrincipal.password `
+    --tenant $tenantId
+
+# Create a new role assignment for a user, group, or service principal
+az role assignment create `
+    --role "Reader" `
+    --assignee $servicePrincipal.appId `
+
+# Log in to Azure using service principal
+az login `
+    --service-principal `
+    --username $servicePrincipal.appId `
+    --password $servicePrincipal.password `
+    --tenant $tenantId
+
+# List containers in a storage account
+az storage container list `
+ --account-name $storageAccount
+
+$storageAccountId = (
+    # Show storage account properties
+    az storage account show `
+        -n $storageAccount `
+        --query id `
+        -o tsv
+)
+
+$servicePrincipalId = (
+    # Get the details of a service principal
+    az ad sp show `
+        --id $servicePrincipal.appId `
+        --query objectId `
+        -o tsv
+)
+
+# Log in to Azure using user account
+az login
+ 
+# Create a new role assignment for a user, group, or service principal
+az role assignment create `
+    --role "Storage Account Contributor" `
+    --assignee-object-id $servicePrincipalId `
+    --scope $storageAccountId
+
+# Log in to Azure using service principal
+az login `
+    --service-principal `
+    --username $servicePrincipal.appId `
+    --password $servicePrincipal.password `
+    --tenant $tenantId
+
+# Create a container in a storage account
+az storage container create `
+    --account-name $storageAccount `
+    --name $container
+
+# List containers in a storage account
+az storage container list `
+ --account-name $storageAccount
+
+# Log in to Azure using user account
+az login
+
+# Delete a service principal and its role assignments
+az ad sp delete `
+    --id $servicePrincipal.appId
+
+# Delete resource group
+az group delete `
+    -n $resourceGroup `
+    --yes
+```
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Shared;
+using Microsoft.WindowsAzure.Storage.Auth;
+
+namespace az203.secure
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            runAsync().Wait();
+        }
+
+        private static async Task runAsync()
+        {
+            // Request an access token to a storage account
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            var tokenCredential = new TokenCredential(
+                await azureServiceTokenProvider.GetAccessTokenAsync("https://storage.azure.com/")
+            );
+            // Represents a set of credentials used to authenticate access to a Microsoft Azure storage account
+            var storageCredentials = new StorageCredentials(tokenCredential);
+
+            try
+            {
+                // Represents a Microsoft Azure Storage account
+                var cloudStorageAccount = new CloudStorageAccount(
+                    storageCredentials, 
+                    useHttps: true, 
+                    accountName: "storageAccount", 
+                    endpointSuffix: "core.windows.net"
+                );
+                // Creates the Blob service client.
+                var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+
+                // Returns a reference to a CloudBlobContainer object with the specified name
+                var containerReference = cloudBlobClient.GetContainerReference("container");
+                containerReference.CreateIfNotExists();
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+        }
+    }
+}
+```
 ## Implement Dynamic Data Masking and Always Encrypted
 ## Secure access to an AKS cluster
 
