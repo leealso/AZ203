@@ -538,7 +538,69 @@ namespace az203.secure
 }
 ```
 ## Implement Dynamic Data Masking and Always Encrypted
+Dynamic Data Masking (DDM) limits sensitive data by masking it from non-provilged users. This can be complicated in you application code, so DDM moves it to the database.
+
+It is not a form of security per se. It simply prevents certain users (non-privileged) from seeing part or all of data. It remains in its original form in the database.
+
+Always Encrypted prevents access to data by non-owners of the data. This is performed by encrypting specific columns of a table using a certificate. The certificate is best stored securely in a place such as Key Vault.
+
+It is useful when you need to have non-privileged users administer a database and be blocked from seeing data (which admins normally can).
+
+```powershell
+$resourceGroup = "resourceGroup"
+$sever = "server"
+$database = "database"
+
+# Creates a data masking rule for a database
+New-AzureRmSqlDatabaseDataMaskingRule `
+    -ResourceGroupName $resourceGroup `
+    -ServerName $sever `
+    -DatabaseName $database `
+    -SchemaName "dbo" `
+    -TableName "Users" `
+    -ColumnName "AccountCode" `
+    -MaskingFunction Text `
+    -SuffixSize 2 `
+    -ReplacementString "xxxxxxxx"
+```
+
 ## Secure access to an AKS cluster
+Azure Kubernetes Services (AKS) can be configured to use Azure Active Directory (AAD) for user authentication. Using AAD you can log in to an AKS cluster using Azure Active Directory authentication token. 
+
+Aditionally, cluster administrator are able to configure Kubernetes role-based acces control (RBAC) based on a users identity or directory group membership. This is all based on OpenID Connect and requires the creation of two Service Principal. One for the server, and a second for client login.
+
+```powershell
+az aks create `
+    --resource-group $resourceGroup
+    --name $cluster
+    --generate-ssh-keys
+    --aad-server-app-id $serverAppId
+    --aad-server-app-secret $serverSecret
+    --aad-server-app-id $clientAppId
+    --aad-tenant $tenant
+
+az aks get-credentials `
+    --resource-group $resourceGroup
+    --name $cluster
+    --admin
+
+kubectl apply -f rbac-aad-user.yaml
+```
+Manifest file used above (rbac-aad-user.yaml).
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: constoso-cluster-admins
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+subjects:
+    apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: "user@contoso.com"
+```
 
 ## References
 * [What is Azure Service Bus?](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview).
